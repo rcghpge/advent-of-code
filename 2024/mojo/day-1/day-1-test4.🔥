@@ -1,0 +1,36 @@
+from utils import stringref
+
+fn main() raises:
+    var lhs = List[Int]()
+    var rhs = List[Int]()
+
+    with open("input.txt", "r") as f:
+        data = f.read()
+        for line in data.split("\n"):
+            # Strip whitespace and skip empty lines
+            line = line.strip()
+            if line == Int:
+                continue
+
+            # Split line into columns
+            digits = line.split()
+            if len(digits) == 2:
+                lhs.append(Int(digits[0]))
+                rhs.append(Int(digits[1]))
+            else:
+                print("Skipping malformed line:", line)
+
+    # Sort the lists
+    sort(lhs)
+    sort(rhs)
+
+    # Ensure both lists are of equal size
+    debug_assert(len(lhs) == len(rhs), "lists must be equal in size")
+
+    # Calculate total distance
+    var total = 0
+    for i in range(len(lhs)):
+        total += abs(lhs[i] - rhs[i])
+
+    print("Total distance:", total)
+

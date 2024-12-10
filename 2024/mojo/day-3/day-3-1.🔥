@@ -1,0 +1,4 @@
+from collections import string
+
+fn main():
+   print("This is tough!", chr(0x1F525))

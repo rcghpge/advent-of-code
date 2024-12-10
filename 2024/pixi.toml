@@ -1,0 +1,13 @@
+[project]
+authors = ["rcghpge <rcocker87@gmail.com>"]
+channels = ["conda-forge", "https://conda.modular.com/max"]
+description = "Advent of Code 2024 Mojo"
+name = "aoc-2024-mojo"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "==3.12.8"
+max = ">=24.5.0,<25"
