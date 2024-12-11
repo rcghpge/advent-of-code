@@ -1,0 +1,32 @@
+from builtin.io import print
+from collections.list import List
+from collections.string import String
+from builtin.dtype import DType
+from max.graph import ops
+
+fn process_map(map: List[Int]) -> Int:
+    return (map==255).cast[DType.uint8]().reduce_add()
+
+fn main() raises:
+    var first_map = List[Int]()
+    with open("input.txt", "r") as f:
+        var content = f.read()
+        for char in content:
+            first_map.append(ord(char))
+
+    var result = 0
+    while True:
+        current_position += directions[int(next_step)]
+        if current_position >= 100 or current_position <0:
+            break
+        if map[int(current_position)] == 1:
+            current_position -= directions[int(next_step)]
+            next_step +=1 
+        else:
+            map[int(current_position)] = 255
+        next_step &= 3
+        result = process_map(first_map)
+        if some_condition:
+            break
+
+    print(result)

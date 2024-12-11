@@ -1,0 +1,59 @@
+# rd4com from Modular Discord server's Day 6 solution
+
+# Test out the speed of Mojo with the time module/package
+from time import perf_counter_ns
+from collections.string import String
+
+def map_simulation(map: List[String]) -> Int:
+    var first_map: String
+    with open("input.txt", "r") as f:
+        first_map = f.read()	
+    return first_map
+
+# 130 x 130 grid from input data
+fn process_map():
+var map = SIMD[DType.uint8, 128]() #10 x 10
+var next_step = Int8(1)
+var current_position = Int8(0)
+var i = 0
+    for row in first_map:
+        for col in row[]:
+            if col == '.': 
+                map[i] = 0
+            elif col == "#": 
+                map[i] = 1
+            else: 
+                if col == '<': next_step = 0
+                if col == '^': next_step = 1
+                if col == '>': next_step = 2
+                if col == 'v': next_step = 3
+                map[i] = 0
+                current_position = i
+            i +=1
+#                                 ⬅️ 0, ⬆️ 1, ➡️ 2, ⬇️ 3
+var directions = SIMD[DType.int8, 4](-1, -10, 1, 10)
+    while True:
+        current_position += directions[int(next_step)]
+        if current_position >= 100 or current_position <0:
+            break
+        if map[int(current_position)] == 1:
+            current_position -= directions[int(next_step)]
+            next_step +=1 
+        else:
+            map[int(current_position)] = 255
+        next_step &= 3
+     return = (map==255).cast[DType.uint8]().reduce_add())
+
+#var t1 = perf_counter_ns()
+
+# Mojo time package
+#fn main() raises:
+    #var s1 = perf_counter_ns()
+    #var p1 = part1(col1, col2)
+    #var d1 = (perf_counter_ns() - s1) / 1000
+    #print("part 1: {} ({} µs)".format(p1, d1))
+
+    #var s2 = perf_counter_ns()
+    #var p2 = part2(col1, col2)
+    #var d2 = (perf_counter_ns() - s2) / 1000
+    #print("part 2: {} ({} µs)".format(p2, d2))

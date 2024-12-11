@@ -1,0 +1,67 @@
+from collections import Set
+
+# Struct to map the grid and guard's state
+struct Grid:
+    var cells: List[List[Char]]
+    var guard_pos: (Int, Int)
+    var guard_dir: Char
+
+    fn __init__(inout self, input_map: List[Char]):
+        self.cells = []
+        for line in input_map:
+            self.cells.append([c for c in line])
+        self.find_guard()
+
+    fn find_guard(inout self):
+        for r in range(len(self.cells)):
+            for c in range(len(self.cells[r])):
+                if self.cells[r][c] in ['^', '>', 'v', '<']:
+                    self.guard_pos = (r, c)
+                    self.guard_dir = self.cells[r][c]
+                    self.cells[r][c] = '.'
+                    return
+
+    fn is_within_bounds(self, pos: (Int, Int)) -> Bool:
+        r, c = pos
+        return 0 <= r < len(self.cells) and 0 <= c < len(self.cells[0])
+
+    fn is_obstacle(self, pos: (Int, Int)) -> Bool:
+        r, c = pos
+        return self.cells[r][c] == '#'
+
+    fn move_guard(inout self):
+        DIRECTIONS = {'^': (-1, 0), '>': (0, 1), 'v': (1, 0), '<': (0, -1)}
+        TURN_RIGHT = {'^': '>', '>': 'v', 'v': '<', '<': '^'}
+
+        visited = Set[(Int, Int)]()
+        pos = self.guard_pos
+        direction = self.guard_dir
+
+        while self.is_within_bounds(pos):
+            visited.insert(pos)
+            move = DIRECTIONS[direction]
+            next_pos = (pos[0] + move[0], pos[1] + move[1])
+            if not self.is_within_bounds(next_pos) or self.is_obstacle(next_pos):
+                direction = TURN_RIGHT[direction]
+            else:
+                pos = next_pos
+
+        return visited
+
+# Read input map from a file
+fn read_input_file(file_path: String) -> List[Char]:
+    var input_map = List[Char]()
+    with open(file_path, "r") as file:
+        for line in file:
+            input_map.append(line.strip())
+    return input_map
+
+# Simulation Loop
+fn main():
+    var file_path = "input.txt"  
+    var input_map = read_input_file(file_path)
+    var grid = Grid(input_map)
+    var visited_positions = grid.move_guard()
+    print(f"The guard visits {len(visited_positions)} distinct positions.")
+
+main()

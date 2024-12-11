@@ -1,0 +1,2 @@
+- Puzzle 5 day 5 was challenging. I could not find a robust solution in pure Mojo.
+- Will revisit. I had trouble with list comprehensions and data types.
