@@ -9,6 +9,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-python = "==3.12.8"
+python = ">=3.12.8,<3.13"
 max = ">=24.5.0,<25"
 joblib = ">=1.4.2,<2"
+mojo = "*"
