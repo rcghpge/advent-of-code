@@ -1,0 +1,75 @@
+from utils.index import product
+from time import perf_counter_ns
+
+# Function to evaluate equations with given operators
+def evaluate_equation(values, operators):
+    """
+    Evaluates the equation with the given operators.
+    :param values: List of integers representing numbers in the equation.
+    :param operators: List of operators ('+' or '*').
+    :return: Result of the evaluation.
+    """
+    result = values[0]
+    for i, op in enumerate(operators):
+        if op == '+':
+            result += values[i + 1]
+        elif op == '*':
+            result *= values[i + 1]
+    return result
+
+# Function to determine if a test value can be achieved
+def is_equation_valid(target, values):
+    """
+    Determines if a test value can be achieved with the given values and operators.
+    :param target: Target result to achieve.
+    :param values: List of integers.
+    :return: True if valid, False otherwise.
+    """
+    operator_combinations = product(['+', '*'], repeat=len(values) - 1)
+
+    for operators in operator_combinations:
+        if evaluate_equation(values, operators) == target:
+            return True
+    return False
+
+# Function to process the input file and calculate the total calibration result
+def calculate_total_calibration(input_file):
+    """
+    Processes the input file and calculates the total calibration result.
+    :param input_file: Path to the input file.
+    :return: Total calibration result.
+    """
+    total_calibration = 0
+
+    with open(input_file, 'r') as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+
+            target, values = line.split(':')
+            target = int(target)
+            values = list(map(int, values.strip().split()))
+
+            if is_equation_valid(target, values):
+                total_calibration += target
+
+    return total_calibration
+
+def main():
+    """
+    Main function to execute the calculation.
+    """
+    input_file = "input.txt"  # Replace with your input file path
+
+    # Timing the execution
+    start_time = perf_counter_ns()
+    total_calibration_result = calculate_total_calibration(input_file)
+    end_time = perf_counter_ns()
+
+    print("Total calibration result: {total_calibration_result}")
+    print("Execution time:" ((end_time - start_time) / 1_000_000:.4f) "milliseconds")
+
+if __name__ == "__main__":
+    main()
+

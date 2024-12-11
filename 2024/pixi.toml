@@ -11,3 +11,4 @@ version = "0.1.0"
 [dependencies]
 python = "==3.12.8"
 max = ">=24.5.0,<25"
+joblib = ">=1.4.2,<2"
