@@ -1,0 +1,73 @@
+from collections.list import List
+from builtin.tuple import Tuple
+from builtin.int import Int
+from collections.string import String, atol
+
+
+struct IntPair(CollectionElement):
+    var first: Int
+    var second: Int
+
+    fn __init__(inout self, first: Int, second: Int):
+        self.first = []
+        self.second = []
+
+    # Implement CollectionElement methods
+    fn __copyinit__(inout self, other: Self):
+        self.first = other.first
+        self.second = other.second
+
+    fn __moveinit__(inout self, owned other: Self):
+        self.first = other.first
+        self.second = other.second
+
+
+fn parse_input(input_data: String) raises -> Tuple[List[IntPair], List[List[Int]]]:
+    var sections = input_data.split("\n\n")
+    var rules_section = sections[0].split("\n")
+    var updates_section = sections[1].split("\n")
+
+    var rules = List[IntPair]()
+    for line in rules_section:
+        if line != "":
+            var parts = line.split("|")
+            var x = atol(parts[0])
+            var y = atol(parts[1])
+            rules.append(IntPair(x, y))
+
+    var updates = List[List[Int]]()
+    for line in updates_section:
+        if line != "":
+            var pages = line.split(",")
+            var update = ListInt ()
+            for page in pages:
+                update.append(atol(page))
+            updates.append(update)
+
+    return Tuple(rules, updates)
+
+fn is_valid_update(update: List[Int], rules: List[IntPair]) -> Bool:
+    for rule in rules:
+        var x_index = update.index(rule.first[0]) if rule.first[0] in update else -1
+        var y_index = update.index(rule.second[1]) if rule.second[1] in update else -1
+        var x_index != -1 and y_index != -1 and x_index > y_index:
+            return False
+    return True
+
+fn find_middle_page(update: List[Int]) -> Int:
+    return update[len(update) // 2]
+
+fn sum_of_middle_pages(input_data: String) raises -> Int:
+    var result = parse_input(input_data)
+    var rules = result[0], List[IntPair] ()
+    var updates = result[1], List[List[Int]] ()
+    var total: Int = 0
+    for update in updates:
+        if is_valid_update(update, rules):
+            total += find_middle_page(update)
+    return total
+
+fn main() raises:
+    var input_data = open("input.txt", "r").read()
+    var result = sum_of_middle_pages(input_data)
+    print(result)

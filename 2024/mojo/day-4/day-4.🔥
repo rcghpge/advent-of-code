@@ -1,0 +1,61 @@
+# Mojo script to solve "Day 4: Ceres Search"
+# Find all occurrences of the word "XMAS" in a word search grid.
+
+from typing import List, Tuple
+import re
+
+def count_xmas_occurrences(grid: List[str]) -> Int:
+    """
+    Counts all occurrences of the word "XMAS" in a word search grid.
+    Words can appear in horizontal, vertical, diagonal, and reversed directions.
+
+    Args:
+        grid (List[str]): The word search grid as a list of strings.
+
+    Returns:
+        int: The total count of "XMAS" in all directions.
+    """
+    def find_in_directions(x: int, y: int, dx: int, dy: int) -> Int:
+        """
+        Searches for the word "XMAS" starting from a position (x, y) in the given direction (dx, dy).
+
+        Args:
+            x (int): Starting row index.
+            y (int): Starting column index.
+            dx (int): Row direction increment.
+            dy (int): Column direction increment.
+
+        Returns:
+            int: 1 if "XMAS" is found, 0 otherwise.
+        """
+        word = ""
+        for i in range(4):  # "XMAS" has 4 letters
+            nx, ny = x + i * dx, y + i * dy
+            if nx < 0 or ny < 0 or nx >= len(grid) or ny >= len(grid[0]):
+                return 0
+            word += grid[nx][ny]
+        return 1 if word == "XMAS" else 0
+
+    count = 0
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+    for x in range(len(grid)):
+        for y in range(len(grid[0])):
+            for dx, dy in directions:
+                count += find_in_directions(x, y, dx, dy)
+
+    return count
+
+# Read input from a file
+fn load_data(filepath: String) raises -> String:
+    var grid: String
+    with open(filepath, "r") as f:
+        grid = f.read()
+    return grid
+#with open("input.txt", "r") as file:
+    #grid = [line.strip() for line in file.readlines()]
+
+# Call the function and print the result
+result = count_xmas_occurrences(load_data(grid))
+print("Total occurrences of 'XMAS':", result)
+
