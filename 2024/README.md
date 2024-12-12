@@ -6,5 +6,7 @@ I ended up utilizing Python to cross-reference my solutions and proof logic in t
 **Spoiler:** Solutions are provided. Though you can parse the code to aid in solving the puzzles/challenges at your own pace 🙂
 
 **Modular Discord:** https://discord.gg/6qvDjX3Z6d  
+
 **Modular Forum:** https://forum.modular.com  
+
 **Python Discord:** https://discord.gg/python  
