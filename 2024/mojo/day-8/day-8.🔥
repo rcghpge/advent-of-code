@@ -1,0 +1,2 @@
+fn main():
+    print("day-8 marker")

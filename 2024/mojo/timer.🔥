@@ -11,4 +11,4 @@ fn main() raises:
     var elapsed_s = elapsed_ns/1000000000
     print("Elapsed time:" + str(elapsed_s) + " seconds)")
 
-#print("Part 1: " + str(p1_solution) + " (" + str(timer1) + " seconds)")
+
