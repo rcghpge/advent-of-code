@@ -1,4 +1,5 @@
 from collections import Set
+# Day 6 Mojo solutions incomplete. Please see aoc-cheat-sheet for complete day 6 solutions in Python.
 
 # Struct to map the grid and guard's state
 struct Grid:

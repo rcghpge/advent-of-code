@@ -1,0 +1,33 @@
+# Subscriptng in Mojo 
+from collections import Dict
+from builtin.int import Int
+from collections.string import String
+from time import perf_counter_ns
+
+# Struct subcripting logic
+struct Struct:
+    # Define properties
+    var data: Dict[String, Int]  # Example: Dictionary to store key-value pairs
+
+    # Constructor
+    fn __init__(inout self):
+        self.data = Dict[String, Int]()
+
+    # Define __getitem__ to enable subscription
+    fn __getitem__(self, key: String) raises -> Int:
+        return self.data[key]
+
+    # Define __setitem__ to allow setting values with subscription
+    fn __setitem__(inout self, key: String, value: Int):
+        self.data[key] = value
+
+# Example 
+fn main() raises:
+    var start = perf_counter_ns()
+    my_struct = Struct()
+    my_struct["a"] = 100  # Set value 
+    var end = perf_counter_ns()
+    var elapsed_ns = end -start
+    var elapsed_s = elapsed_ns/1000000000
+    print("Struct key:" + str(my_struct["a"])) # Acess value
+    print("Elapsed time:" + str(elapsed_s) + " seconds") # Code execution @ runtime

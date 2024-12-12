@@ -3,6 +3,8 @@ from time import perf_counter_ns
 from collections import Counter
 from utils import format
 
+# Mojo solution is incomplete. See aoc-cheat-sheet repo for Part 1 soution in Python.
+
 alias MulOp: UInt8 = 0
 alias AddOp: UInt8 = 1
 alias ConcatOp: UInt8 = 2
@@ -138,10 +140,12 @@ fn main() raises:
     var start1 = perf_counter_ns()
     var p1_solution = part_1()
     var timer1 = (perf_counter_ns() - start1)/1000000000
-    print("Part 1: " + str(p1_solution) + " (" + str(timer1) + " seconds)") 
+    print("Part 1: " + str(p1_solution)) 
+    print("Execution time:" + str(timer1) + " seconds")    
     
     # Part 2 Solution
     var start2 = perf_counter_ns()
     var p2_solution = part_2()
     var timer2 = (perf_counter_ns() - start2)/1000000000
-    print("Part 2: " + str(p2_solution) + " (" + str(timer2) + " seconds)")
+    print("Part 2: " + str(p2_solution))
+    print("Execution time:" + str(timer2) + " seconds")

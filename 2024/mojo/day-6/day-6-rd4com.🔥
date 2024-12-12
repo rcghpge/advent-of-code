@@ -11,7 +11,7 @@ def map_simulation(map: List[String]) -> Int:
     return first_map
 
 # 130 x 130 grid from input data
-fn process_map():
+fn process_map(): pass
 var map = SIMD[DType.uint8, 128]() #10 x 10
 var next_step = Int8(1)
 var current_position = Int8(0)

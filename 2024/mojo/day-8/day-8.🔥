@@ -1,2 +1,72 @@
-fn main():
-    print("day-8 marker")
+from collections import dict, list, set
+from collections.dict import Dict
+from builtin.str import str
+from collections.string import String
+from builtin import file
+from collections.list import List
+from collections.set import Set
+from builtin.tuple import Tuple
+from builtin.int import Int
+
+# Solution is incomplete see aoc-cheat-sheet repo for complete day 8 solutions in Python.
+
+
+# Parse map into coordinates
+fn parse_map(map_lines: List[String]) raises -> Dict[String, List[Tuple[Int, Int]]:
+    var antenna_positions = Dict[String, List[Tuple[Int, Int]]()
+    
+    for item in enumerate(map_lines):
+        var y = item.get[0, Int]()
+        var line = item.get[1, String]()
+        
+        for char_item in enumerate(line):
+            var x = char_item.get[0, Int]()
+            var char = char_item.get[1, String]()
+	    
+            if char != ".":
+                
+                if not antenna_positions.contains_key(char):
+                    antenna_positions[char] = List[Tuple[Int, Int]]()
+		antenna_positions[char].append((x, y))
+    return antenna_positions
+
+# Calculate antinodes
+def calculate_antinodes(antenna_positions: Dict, width: int, height: int) -> set:
+    antinodes = set()
+    for frequency, positions in antenna_positions.items():
+        n = len(positions)
+        for i in range(n):
+            for j in range(i + 1, n):
+                x1, y1 = positions[i]
+                x2, y2 = positions[j]
+
+                # Check for collinearity
+                if x1 == x2 or y1 == y2 or abs(x1 - x2) == abs(y1 - y2):
+                    # Compute antinodes
+                    dx, dy = (x2 - x1) // 2, (y2 - y1) // 2
+                    antinode1 = (x1 - dx, y1 - dy)
+                    antinode2 = (x2 + dx, y2 + dy)
+
+                    # Add valid antinodes
+                    if 0 <= antinode1[0] < width and 0 <= antinode1[1] < height:
+                        antinodes.add(antinode1)
+                    if 0 <= antinode2[0] < width and 0 <= antinode2[1] < height:
+                        antinodes.add(antinode2)
+    return antinodes
+
+# Main function to solve challenge
+def resonant_collinearity(input_file: str) -> int:
+    with open(input_file, 'r') as file:
+        map_lines = file.read()
+
+    height, width = len(map_lines), max(len(line.strip()) for line in map_lines)
+    antenna_positions = parse_map(map_lines)
+    antinodes = calculate_antinodes(antenna_positions, width, height)
+    return len(antinodes)
+
+# Run script
+fn main() raises:
+    input_file = "input.txt"
+    result = resonant_collinearity(input_file)
+    print("Total unique antinode locations:", + int(result))
+
