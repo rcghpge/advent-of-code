@@ -1,0 +1,28 @@
+from math import iota
+
+# rd4com's parse map soltuion
+def main():
+    map = SIMD[DType.int8, 256](-1)
+    tmp = "4114501151"
+    idx = 0
+
+    for i in range(len(tmp)):
+        num = atol(tmp[i])
+        is_space_block = i % 2 != 0
+        for _size in range(num):
+            if is_space_block:
+                map[idx] = -2
+            else:
+                map[idx] = i // 2 
+            idx += 1
+    print(map)
+
+    indexes = iota[DType.int8, 256]()
+    first_slot = int((map == -2).select(indexes, 127).reduce_min())
+    last_elem = int((map > 0).select(indexes, -1).reduce_max())
+    while first_slot < last_elem:
+        map[first_slot] = map[last_elem]
+        map[last_elem] = -2
+        last_elem = int((map > 0).select(indexes, -1).reduce_max())
+        first_slot = int((map == -2).select(indexes, 127).reduce_min())
+    print(map)

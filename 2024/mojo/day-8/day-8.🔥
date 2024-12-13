@@ -12,22 +12,18 @@ from builtin.int import Int
 
 
 # Parse map into coordinates
-fn parse_map(map_lines: List[String]) raises -> Dict[String, List[Tuple[Int, Int]]:
+fn parse_map(map_lines: List[String]) raises -> Dict[String, List[Tuple[Int, Int]]]:
     var antenna_positions = Dict[String, List[Tuple[Int, Int]]()
-    
     for item in enumerate(map_lines):
         var y = item.get[0, Int]()
         var line = item.get[1, String]()
-        
         for char_item in enumerate(line):
             var x = char_item.get[0, Int]()
             var char = char_item.get[1, String]()
-	    
             if char != ".":
-                
                 if not antenna_positions.contains_key(char):
                     antenna_positions[char] = List[Tuple[Int, Int]]()
-		antenna_positions[char].append((x, y))
+	        antenna_positions[char].append((x, y))
     return antenna_positions
 
 # Calculate antinodes

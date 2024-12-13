@@ -1,26 +1,38 @@
+from python import Python, PythonObject
 from time import perf_counter_ns
+from collections import Counter
+from utils import format
 
+# Aliases
 alias MulOp: UInt8 = 0
 alias AddOp: UInt8 = 1
 alias ConcatOp: UInt8 = 2
 
+# Logic
 fn product(iterables: List[Int], repeat: Int = 1) -> List[List[Int]]:
-    """
-    Generates Cartesian product of input iterables with repetitions.
-    """
+    # Repeat iterables 'repeat' times
     var pools = List[List[Int]]()
     for _ in range(repeat):
         pools.append(iterables)
 
+    # If no pools, return empty
     if len(pools) == 0:
         return List[List[Int]]()
 
-    var indices = List[Int]([0] * len(pools))
+    # Initialize indices to track position in each pool
+    var indices = List[Int]()
+    for _i in range(len(pools)):
+        indices.append(0)
     var results = List[List[Int]]()
-
+    
     while True:
-        results.append([pools[i][indices[i]] for i in range(len(pools))])
-
+        # Construct combination
+        var combo = List[Int]()
+        for i in range(len(pools)):
+            combo.append(pools[i][indices[i]])
+        results.append(combo)
+        
+        # Increment
         var i = len(pools) - 1
         while i >= 0:
             indices[i] += 1
@@ -29,59 +41,78 @@ fn product(iterables: List[Int], repeat: Int = 1) -> List[List[Int]]:
                 i -= 1
             else:
                 break
-
+        
         if i < 0:
             break
 
     return results
 
+# Load data function
 fn load_data(filepath: String) raises -> List[List[Int]]:
-    """
-    Loads data from a file and parses equations into a structured format.
-    """
     var text: String
     with open(filepath, "r") as f:
         text = f.read()
-
+    
     var equations = List[List[Int]]()
     for line in text.split('\n'):
-        if line.strip() == '':
-            continue
+        if line[].strip() == '': continue
 
-        equations.append([int(line.split(':')[0])])
-        for num in line.strip().split(' ')[1:]:
-            equations[-1].append(int(num))
-
+        equations.append(List[Int]())
+        var res = int(line[].split(':')[0])
+        equations[-1].append(res)
+        var split_line = line[].strip().split(' ')
+        for i in range(1, len(split_line)):
+            equations[-1].append(int(split_line[i]))
+    
     return equations
 
+# Part 1 logic
 fn part_1() raises -> Int:
-    """
-    Part 1 of puzzle/challenge using multiplication and addition operations (2 operators).
-    """
-    var equations = load_data("input.txt")
-    return sum(eq[0] for eq in equations if is_solvable(eq, [MulOp, AddOp]))
+    var equations = load_data('input.txt')
+    
+    var acc: Int = 0
 
+    for eq_ref in equations:
+            var eq = eq_ref[] # Reference equations
+            if is_solvable_part1(eq):
+                acc += eq[0]
+
+    return acc
+
+# Part 2 logic
 fn part_2() raises -> Int:
-    """
-    Part 2 of puzzle/challenge adding concatenation to the allowed operations (3 total).
-    """
-    var equations = load_data("input.txt")
-    return sum(eq[0] for eq in equations if is_solvable(eq, [MulOp, AddOp, ConcatOp]))
+    var equations = load_data('input.txt')
+    
+    var acc: Int = 0
 
-fn is_solvable(eq: List[Int], allowed_ops: List[Int]) raises -> Bool:
-    """
-    Checks if an equation is solvable using the allowed operations.
-    """
-    for ops in product(allowed_ops, repeat=len(eq)-2):
-        if is_solvable_h(eq, ops):
-            return True
+    for eq_ref in equations:
+        var eq = eq_ref[]
+        if is_solvable_part2(eq):
+            acc += eq[0]
+
+    return acc
+
+# Implementation logic for Part 1
+fn is_solvable_part1(eq: List[Int]) raises -> Bool:
+    for i in product(List[Int](0, 1), repeat = len(eq)-2):  # Only AddOp and MulOp
+            var i = i_ref[] # Dereference reference to pull value
+            if is_solvable_h(eq, i):
+                return True
+
+    return False
+
+# Implementation logic for Part 2
+fn is_solvable_part2(eq: List[Int]) raises -> Bool:
+    for i in product(List[Int](0, 1, 2), repeat = len(eq)-2):  # AddOp, MulOp, and ConcatOp
+            var i = i_ref[] # Dereference reference to pull value
+            if is_solvable_h(eq, i):
+                return True
+
     return False
 
 fn is_solvable_h(eq: List[Int], ops: List[Int]) raises -> Bool:
-    """
-    Evaluates a equation using a given sequence of operations/operators.
-    """
     var acc: Int = eq[1]
+
     for i in range(2, len(eq)):
         if UInt8(ops[i-2]) == MulOp:
             acc *= eq[i]
@@ -90,34 +121,35 @@ fn is_solvable_h(eq: List[Int], ops: List[Int]) raises -> Bool:
         elif UInt8(ops[i-2]) == ConcatOp:
             acc = int_concat(acc, eq[i])
         else:
-            raise ValueError("Unexpected operation.")
+            print("Warning: Unknown operation")
+
     return acc == eq[0]
 
 @always_inline
 fn int_concat(a: Int, b: Int) -> Int:
-    """
-    Concatenate two integers.
-    """
     var digits: Int = 0
     var temp_b: Int = b
+
+    # Count digits in b
     while temp_b > 0:
-        temp_b //= 10
+        temp_b = temp_b // 10
         digits += 1
-    return (a * (10 ** digits)) + b
 
+    return (a * (10**digits)) + b
+
+# Main execution
 fn main() raises:
-    """
-    Measure execution time for Part 1 and Part 2.
-    """
-    var start: Int
-    var end: Int
-
-    start = perf_counter_ns()
+    # Part 1 Solution
+    var start1 = perf_counter_ns()
     var p1_solution = part_1()
-    end = perf_counter_ns()
-    print(f"Part 1 Solution: {p1_solution} \nExecution Time: {(end - start) / 1e6:.3f} ms")
-
-    start = perf_counter_ns()
+    var timer1 = (perf_counter_ns() - start1) / 1_000_000_000
+    print("Part 1: " + str(p1_solution)) 
+    print("Execution time: " + str(timer1) + " seconds")    
+    
+    # Part 2 Solution
+    var start2 = perf_counter_ns()
     var p2_solution = part_2()
-    end = perf_counter_ns()
-    print(f"Part 2 Solution: {p2_solution} \nExecution Time: {(end - start) / 1e6:.3f} ms")
+    var timer2 = (perf_counter_ns() - start2) / 1_000_000_000
+    print("Part 2: " + str(p2_solution))
+    print("Execution time: " + str(timer2) + " seconds")
+

@@ -1,0 +1,57 @@
+import os
+from time import perf_counter
+from collections.string import String
+
+def read_input(file_name):
+    """Read input from a file."""
+    with open(file_name, 'r') as file:
+        return file.read().strip()
+
+def parse_disk_map(disk_map):
+    """Parses the disk map into a detailed representation of files and free spaces."""
+    parsed_map = []
+    for i in range(0, len(disk_map), 2):
+        file_length = int(disk_map[i])
+        free_space_length = int(disk_map[i + 1])
+        parsed_map.get([len(parsed_map)] * file_length)  # File IDs
+        parsed_map.get(['.'] * free_space_length)  # Free spaces
+    return parsed_map
+
+def compact_disk(disk):
+    """Compacts the disk by moving files to the leftmost free space."""
+    compacted = []
+    for block in disk:
+        if block != '.':
+            compacted.append(block)
+    compacted.get(['.'] * (len(disk) - len(compacted)))
+    return compacted
+
+def calculate_checksum(disk):
+    """Calculates the filesystem checksum based on the compacted disk."""
+    checksum = 0
+    for position, block in enumerate(disk):
+        if block != '.':
+            checksum += position * int(block)
+    return checksum
+
+fn main() raises:
+    start_time = perf_counter()
+
+    # Read and parse input
+    var input_file = 'input.txt'
+    var disk_map = read_input(input_file)
+    var disk = parse_disk_map(disk_map)
+
+    # Compact the disk
+    var compacted_disk = compact_disk(disk)
+
+    # Calculate the checksum
+    var checksum = calculate_checksum(compacted_disk)
+
+    end_time = perf_counter()
+    execution_time = end_time - start_time
+
+    print("Checksum:" + str(checksum))
+    print("Execution Time:" + str(execution_time) + " seconds")
+ 
+
