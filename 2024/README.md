@@ -3,6 +3,8 @@ My submissions for Advent of Code 2024 in Mojo are not all 100%. This is my firs
 
 I ended up utilizing Python to cross-reference my solutions and proof logic in the solutions. Feel free to join the larger Modular community. If you are stumped on solutions, see the Python community on Discord for help with solutions or other programming communities for your language of choice. 
 
+See aoc-cheat-sheet repo for Python solutions: https://github.com/rcghpge/aoc-cheat-sheet 
+
 **Spoiler:** Solutions are provided. Though you can parse the code to aid in solving the puzzles/challenges at your own pace 🙂
 
 **Modular Discord:** https://discord.gg/6qvDjX3Z6d  
