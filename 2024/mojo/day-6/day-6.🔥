@@ -1,47 +1,88 @@
+from builtin.simd import SIMD
 from collections import Set
+from collections.dict import Dict
+from builtin.tuple import Tuple
+from builtin.int import Int
+from builtin.dtype import DType
+from collections.string import ord
+from builtin.simd import SIMD
+from builtin.len import Sized
+
 # Day 6 Mojo solutions incomplete. Please see aoc-cheat-sheet for complete day 6 solutions in Python.
 
 # Struct to map the grid and guard's state
-struct Grid:
-    var cells: List[List[Char]]
-    var guard_pos: (Int, Int)
-    var guard_dir: Char
+struct Position():
+    var x: Int
+    var y: Int
 
-    fn __init__(inout self, input_map: List[Char]):
+    fn __init__(inout self, x: Int, y: Int):
+        self.x = x
+        self.y = y
+
+    fn __eq__(self, other: Self) -> Bool:
+        return self.x == other.x and self.y == other.y
+
+    fn __hash__(self) -> Int:
+        return self.x * 31 + self.y # Hash function for 2D position
+
+    fn __ne__(self, other: Self) -> Bool:
+        return not self == other
+
+struct Grid:
+    var cells: List[List[SIMD[DType.uint8, 1]]]
+    var guard_pos: Tuple[Int, Int]
+    var guard_dir: SIMD[DType.uint8, 1]
+
+    fn __init__(inout self, input_map: List[String]):
         self.cells = []
         for line in input_map:
-            self.cells.append([c for c in line])
+            var row = []
+            for c in line:
+                row[].append(SIMD[DType.uint8, 1](ord(c)))
+            self.cells.append(row)
         self.find_guard()
 
     fn find_guard(inout self):
         for r in range(len(self.cells)):
             for c in range(len(self.cells[r])):
-                if self.cells[r][c] in ['^', '>', 'v', '<']:
+                if self.cells[r][c] == SIMD[DType.uint8, 1](ord('^')) or \
+                   self.cells[r][c] == SIMD[DType.uint8, 1](ord('>')) or \
+                   self.cells[r][c] == SIMD[DType.uint8, 1](ord('v')) or \
+                   self.cells[r][c] == SIMD[DType.uint8, 1](ord('<')):
                     self.guard_pos = (r, c)
-                    self.guard_dir = self.cells[r][c]
-                    self.cells[r][c] = '.'
+                    self.guard_dir = cells[]
+                    self.cells[r][c] = SIMD[DType.uint8, 1](ord('.'))
                     return
 
-    fn is_within_bounds(self, pos: (Int, Int)) -> Bool:
-        r, c = pos
+    fn is_within_bounds(self, pos: Tuple[Int, Int]) -> Bool:
+        var (r, c) = pos
         return 0 <= r < len(self.cells) and 0 <= c < len(self.cells[0])
 
-    fn is_obstacle(self, pos: (Int, Int)) -> Bool:
-        r, c = pos
-        return self.cells[r][c] == '#'
+    fn is_obstacle(self, pos: Tuple[Int, Int]) -> Bool:
+        var (r, c) = pos
+        return self.cells[r][c] == SIMD[DType.uint8, 1](ord('#'))
 
-    fn move_guard(inout self):
-        DIRECTIONS = {'^': (-1, 0), '>': (0, 1), 'v': (1, 0), '<': (0, -1)}
-        TURN_RIGHT = {'^': '>', '>': 'v', 'v': '<', '<': '^'}
+    fn move_guard(self) -> Set[Position]:
+            var DIRECTIONS = Dict[SIMD[DType.uint8, 1], Tuple[Int, Int]]()
+            DIRECTIONS[SIMD[DType.uint8, 1](ord('^'))] = (-1, 0)
+            DIRECTIONS[SIMD[DType.uint8, 1](ord('>'))] = (0, 1)
+            DIRECTIONS[SIMD[DType.uint8, 1](ord('v'))] = (1, 0)
+            DIRECTIONS[SIMD[DType.uint8, 1](ord('<'))] = (0, -1)
 
-        visited = Set[(Int, Int)]()
-        pos = self.guard_pos
-        direction = self.guard_dir
+            var TURN_RIGHT = Dict[SIMD[DType.uint8, 1], SIMD[DType.uint8, 1]]()
+            TURN_RIGHT[SIMD[DType.uint8, 1](ord('^'))] = SIMD[DType.uint8, 1](ord('>'))
+            TURN_RIGHT[SIMD[DType.uint8, 1](ord('>'))] = SIMD[DType.uint8, 1](ord('v'))
+            TURN_RIGHT[SIMD[DType.uint8, 1](ord('v'))] = SIMD[DType.uint8, 1](ord('<'))
+            TURN_RIGHT[SIMD[DType.uint8, 1](ord('<'))] = SIMD[DType.uint8, 1](ord('^'))
+        
+        var visited = Set[Position]()
+        var pos = self.guard_pos
+        var direction = self.guard_dir
 
         while self.is_within_bounds(pos):
-            visited.insert(pos)
-            move = DIRECTIONS[direction]
-            next_pos = (pos[0] + move[0], pos[1] + move[1])
+            visited.insert(Position(pos[0], pos[1])
+            var move = DIRECTIONS[direction]
+            var next_pos = (pos[0] + move[0], pos[1] + move[1])
             if not self.is_within_bounds(next_pos) or self.is_obstacle(next_pos):
                 direction = TURN_RIGHT[direction]
             else:
@@ -50,19 +91,20 @@ struct Grid:
         return visited
 
 # Read input map from a file
-fn read_input_file(file_path: String) -> List[Char]:
-    var input_map = List[Char]()
+fn read_input_file(file_path: String) raises -> List[String]:
+    var input_map = List[String]()
     with open(file_path, "r") as file:
-        for line in file:
-            input_map.append(line.strip())
+        for line in file.read().split("\n"):
+            if line.strip():
+                input_map.append(line.strip())
     return input_map
 
 # Simulation Loop
-fn main():
+fn main() raises:
     var file_path = "input.txt"  
     var input_map = read_input_file(file_path)
     var grid = Grid(input_map)
     var visited_positions = grid.move_guard()
-    print(f"The guard visits {len(visited_positions)} distinct positions.")
+    print("The guard visits " + str(visited_positions[]) + " distinct positions.")
 
-main()
+
