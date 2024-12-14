@@ -8,7 +8,6 @@ fn read_file(filename: String) raises -> String:
 fn main() raises:
     var start = perf_counter_ns()
     var data = read_file("input.txt")
-    read_file("input.txt")
     var end = perf_counter_ns()
     var timer_ns = end - start
     var timer_s = timer_ns/1000000000
