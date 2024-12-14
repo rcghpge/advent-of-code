@@ -1,0 +1,2 @@
+fn main():
+    print("Day 22 marker")
