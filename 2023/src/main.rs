@@ -1,3 +1,4 @@
+mod util;
 mod day_1;
 mod day_2;
 mod day_3;
@@ -24,15 +25,22 @@ mod day_23;
 mod day_24;
 mod day_25;
 
+//use day_1::{parse, part1, part2};
+//use std::fs;
+
+
+
 fn main() {
-    println!("Running Advent of Code 2023 solutions");
+    println!("Hello World! This is my first line of Rust code!");
+    println!("--12/16/2024 hoping for a solid 2025 less geddit--");
+    println!("Running Advent of Code 2023 solutions..........");
 
     // Run Day 1
-    println!("Day 1:");
-    day_1::run();
-
+    println!("Day 1: Trebuchet?!");
+    day_1::run();    
+    
     // Run Day 2
-    println!("Day 2:");
+    println!("Day 2: Cube Conundrum");
     day_2::run();
     
     // Run Day 3

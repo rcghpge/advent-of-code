@@ -1,9 +1,9 @@
 # Ignore makerfile folder
 makerfile/
 
-# Ignore Rust build artifacts
+# Ignore Rust build artifacts and other folders
 target/
-
+temp-repo/
 # Ignore temporary or log files
 *.log
 *.tmp
