@@ -1,0 +1,30 @@
+# Ignore makerfile folder
+makerfile/
+
+# Ignore Rust build artifacts
+target/
+
+# Ignore temporary or log files
+*.log
+*.tmp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore Python cache files (if using Python)
+__pycache__/
+*.pyc
+

@@ -1,0 +1,23 @@
+# Normalize line endings to LF for code files
+*.rs text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.toml text eol=lf
+*.sh text eol=lf
+
+# Treat binary files as binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.jpg binary
+*.png binary
+
+# Optimize diff for structured data files
+*.json diff
+*.csv diff
+
+# Ignore diff for compiled files
+/target/* -diff
+*.class -diff
+
