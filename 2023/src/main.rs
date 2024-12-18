@@ -25,10 +25,6 @@ mod day_23;
 mod day_24;
 mod day_25;
 
-//use day_1::{parse, part1, part2};
-//use std::fs;
-
-
 
 fn main() {
     println!("Hello World! This is my first line of Rust code!");
@@ -44,7 +40,7 @@ fn main() {
     day_2::run();
     
     // Run Day 3
-    println!("Day 3:");
+    println!("Day 3: Gear Ratios");
     day_3::run();
 
     // Run Day 4
