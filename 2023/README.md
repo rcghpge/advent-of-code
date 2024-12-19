@@ -1,14 +1,18 @@
 # Advent of Code 2023 - Rust
-**WIP**
 
-This repository contains solutions to the **Advent of Code 2023** challenges, implemented in **Rust**. Each day's solution is modularized for clarity and ease of navigation.
+**Work in Progress**
+
+This repository contains solutions to the **Advent of Code 2023** challenges, implemented in **Rust**. Each day's solution is modularized for clarity, scalability, and ease of navigation.
+
+---
 
 ## Project Structure
 
-```
+```plaintext
 ~/advent-of-code/2023/
 ├── Cargo.toml      # Project configuration
 ├── Cargo.lock      # Dependency lock file
+├── data/           # Input data for challenges
 ├── src/
 │   ├── main.rs     # Main orchestrator for running solutions
 │   ├── day_1.rs    # Solution for Day 1
@@ -20,27 +24,32 @@ This repository contains solutions to the **Advent of Code 2023** challenges, im
 - **`Cargo.toml`**: Contains project metadata and dependencies.
 - **`src/main.rs`**: Central entry point that orchestrates the execution of day-specific solutions.
 - **`src/day_n.rs`**: Individual solutions for each day's challenge.
+- **`data/`**: Stores input data for challenges.
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
-- [Rust](https://www.rust-lang.org/) (Ensure you have the latest stable version installed.)
+- Install [Rust](https://www.rust-lang.org/). Ensure you have the latest stable version installed.
 
 ### Installation
+
 Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd advent-of-code/2023
 ```
 
 Build the project:
+
 ```bash
 cargo build
 ```
 
 Run the solutions:
+
 ```bash
 cargo run
 ```
@@ -48,21 +57,26 @@ cargo run
 ---
 
 ## Running Specific Days
-To run a specific day, modify the `main.rs` file or use the CLI if configured. For example, if a CLI is implemented:
+
+You can run solutions for specific days by modifying `main.rs` or using a CLI (if implemented). Example CLI usage:
+
 ```bash
-cargo run -- 1  # Runs Day 1 solution
-cargo run -- 2  # Runs Day 2 solution
+cargo run -- 1  # Runs the Day 1 solution
+cargo run -- 2  # Runs the Day 2 solution
 ```
 
 ---
 
 ## Adding New Solutions
-1. Create a new file in the `src/` directory for the new day:
+
+1. Create a new file for the day in the `src/` directory:
+   
    ```bash
    touch src/day_3.rs
    ```
 
 2. Define the solution in the new file. Example:
+
    ```rust
    pub fn run() {
        println!("Solution for Day 3");
@@ -70,6 +84,7 @@ cargo run -- 2  # Runs Day 2 solution
    ```
 
 3. Update `main.rs` to include the new module and call its `run()` function:
+
    ```rust
    mod day_3;
 
@@ -88,6 +103,7 @@ cargo run -- 2  # Runs Day 2 solution
    ```
 
 4. Build and test:
+
    ```bash
    cargo build
    cargo run
@@ -96,13 +112,16 @@ cargo run -- 2  # Runs Day 2 solution
 ---
 
 ## Dependencies
-This project currently has no external dependencies. To add dependencies, update the `Cargo.toml` file and rebuild the project:
+
+This project currently has no external dependencies. To add dependencies, update the `Cargo.toml` file. Example:
+
 ```toml
 [dependencies]
-regex = "1.7.0"  # Example dependency
+regex = "1.7.0"
 ```
 
-Install and build:
+Install and build the updated project:
+
 ```bash
 cargo build
 ```
@@ -110,31 +129,38 @@ cargo build
 ---
 
 ## Contributing
-Contributions are welcome! Please fork this repository, make your changes, and submit a pull request.
+
+Contributions are welcome! To contribute:
 
 1. Fork the repository.
-2. Create your feature branch:
+2. Create a new branch for your feature or fix:
+   
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
 3. Commit your changes:
+
    ```bash
    git commit -m "Add some feature"
    ```
-4. Push to the branch:
+
+4. Push to your branch:
+
    ```bash
    git push origin feature/your-feature-name
    ```
+
 5. Open a pull request.
 
 ---
 
 ## Acknowledgments
+
 - [Advent of Code](https://adventofcode.com/) by Eric Wastl.
-- The Rust community for excellent documentation and tooling.
-- The Rust Programming Language @ Discord: https://discord.gg/Aa8N6py6sQ
-- Rust Progamming Language Community: https://discord.gg/rust-lang-community
+- The Rust community for its excellent documentation and tooling.
+- [Rust Programming Language Community Discord](https://discord.gg/rust-lang-community).
 
-Happy coding!
+---
 
-
+**Happy coding!** 🎄
