@@ -130,7 +130,7 @@ cargo build
 
 ## Contributing
 
-Contributions, suggestions, and feedback are welcome! See [aoc-proofing-repo](https://github.com/rcghpge/aoc-proofing-repo). This is the baseline repoe for a robust AoC learning source for anyone looking to 100x their programming, coding, and problem-solving skills.
+Contributions, suggestions, and feedback are welcome! See [aoc-proofing-repo](https://github.com/rcghpge/aoc-proofing-repo). This is the baseline repo for a robust AoC learning resource for anyone looking to 100x their programming, coding, and problem-solving skills.
 
 ## Acknowledgments
 
