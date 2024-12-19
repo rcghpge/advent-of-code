@@ -44,7 +44,7 @@ fn main() {
     day_3::run();
 
     // Run Day 4
-    println!("Day 4:");
+    println!("Day 4: Scratchcards");
     day_4::run();
 
     // Run Day 5
