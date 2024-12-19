@@ -157,8 +157,9 @@ Contributions are welcome! To contribute:
 
 ## Acknowledgments
 
+- The Rust community.
 - [Advent of Code](https://adventofcode.com/) by Eric Wastl.
-- The Rust community for its excellent documentation and tooling.
+- [The Rust Programming Language @ Discord](https://discord.gg/Aa8N6py6sQ)
 - [Rust Programming Language Community Discord](https://discord.gg/rust-lang-community).
 
 ---
