@@ -130,30 +130,7 @@ cargo build
 
 ## Contributing
 
-Contributions are welcome! To contribute:
-
-1. Fork the repository.
-2. Create a new branch for your feature or fix:
-   
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. Commit your changes:
-
-   ```bash
-   git commit -m "Add some feature"
-   ```
-
-4. Push to your branch:
-
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-5. Open a pull request.
-
----
+Contributions, suggestions, and feedback are welcome! See aoc-proofing-repo. This is the baseline repoe for a robust AoC learning source for anyone looking to 100x their programming, coding, and problem-solving skills.
 
 ## Acknowledgments
 
