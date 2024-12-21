@@ -9,7 +9,9 @@ To ensure accuracy, I often used Python to cross-reference my Mojo solutions and
 If you're also working through Advent of Code, I highly encourage you to join the vibrant programming communities linked below for support, feedback, and discussions.
 
 ## A Word of Encouragement ✨
-This repository contains solutions and spoilers. While you’re welcome to use them for guidance, I encourage you to parse the code and solve the challenges at your own pace. Advent of Code is all about the journey, not just the destination.
+This repository contains solutions and spoilers. While you’re welcome to use them for guidance, I encourage you to parse the code and solve the challenges at your own pace. Advent of Code is all about the journey, not just the destination.  
+
+If you're stuck on incomplete solutions, please see [proofing repository](https://github.com/rcghpge/aoc-proofing-repo/tree/main) or search GitHub for complete solutions. I will be sure to complete this repository as the Mojo language matures.
 
 ## Community Resources 🤝
 - Modular Discord: [Join the Modular Community](https://discord.com/invite/6qvDjX3Z6d)
@@ -19,3 +21,4 @@ This repository contains solutions and spoilers. While you’re welcome to use t
 Feel free to provide feedback, share your solutions, or suggest improvements. Let’s learn and grow together in this Advent of Code journey!
 
 Happy coding, and good luck! 🎄✨
+
