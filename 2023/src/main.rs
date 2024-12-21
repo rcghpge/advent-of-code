@@ -48,15 +48,15 @@ fn main() {
     day_4::run();
 
     // Run Day 5
-    println!("Day 5:");
+    println!("Day 5: If You Give A Seed A Fertilizer");
     day_5::run();
 
     // Run Day 6
-    println!("Day 6:");
+    println!("Day 6: Wait For It");
     day_6::run();
 
     // Run Day 7
-    println!("Day 7:");
+    println!("Day 7: Camel Cards");
     day_7::run();
 
     // Run Day 8
