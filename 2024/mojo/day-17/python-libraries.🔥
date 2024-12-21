@@ -1,0 +1,19 @@
+from python import Python
+from testing import *
+ 
+def main(): 
+
+    var np = Python.import_module("numpy") 
+
+    var a = np.ones((3, 2, 4), dtype=np.int32) 
+
+    var b = np.ones((3, 2, 4), dtype=np.int32) 
+
+    print(a) 
+    print(b) 
+    print(a.__getattr__("__eq__")(b))
+    print(a.__getattr__("__ne__")(b)) 
+    _ = a
+    _ = b
+
+

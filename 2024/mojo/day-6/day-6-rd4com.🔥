@@ -44,16 +44,15 @@ var directions = SIMD[DType.int8, 4](-1, -10, 1, 10)
         next_step &= 3
      return = (map==255).cast[DType.uint8]().reduce_add())
 
-#var t1 = perf_counter_ns()
 
 # Mojo time package
-#fn main() raises:
-    #var s1 = perf_counter_ns()
-    #var p1 = part1(col1, col2)
-    #var d1 = (perf_counter_ns() - s1) / 1000
-    #print("part 1: {} ({} µs)".format(p1, d1))
+fn main() raises:
+    var s1 = perf_counter_ns()
+    var p1 = part1(col1, col2)
+    var d1 = (perf_counter_ns() - s1) / 1000
+    print("part 1: {} ({} µs)".format(p1, d1))
 
-    #var s2 = perf_counter_ns()
-    #var p2 = part2(col1, col2)
-    #var d2 = (perf_counter_ns() - s2) / 1000
-    #print("part 2: {} ({} µs)".format(p2, d2))
+    var s2 = perf_counter_ns()
+    var p2 = part2(col1, col2)
+    var d2 = (perf_counter_ns() - s2) / 1000
+    print("part 2: {} ({} µs)".format(p2, d2))

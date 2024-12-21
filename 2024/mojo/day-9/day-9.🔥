@@ -1,5 +1,5 @@
 import os
-from time import perf_counter
+from time import perf_counter_ns
 from collections.string import String
 
 def read_input(file_name):
@@ -35,7 +35,7 @@ def calculate_checksum(disk):
     return checksum
 
 fn main() raises:
-    start_time = perf_counter()
+    start_time = perf_counter_ns()
 
     # Read and parse input
     var input_file = 'input.txt'
@@ -48,8 +48,8 @@ fn main() raises:
     # Calculate the checksum
     var checksum = calculate_checksum(compacted_disk)
 
-    end_time = perf_counter()
-    execution_time = end_time - start_time
+    end_time = perf_counter_ns()
+    execution_time = end_time - start_time/1000000000
 
     print("Checksum:" + str(checksum))
     print("Execution Time:" + str(execution_time) + " seconds")

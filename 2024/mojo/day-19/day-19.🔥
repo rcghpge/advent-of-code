@@ -1,2 +1,84 @@
-fn main():
-    print("Day 19 marker")
+from collections import Counter
+from collections.string import String
+
+def parse_input(file_path):
+    with open(file_path, "r") as f:
+        var convert = String(f.read().strip())
+        var lines = convert.split('\n')
+    
+    # The first part of the input contains available towel patterns
+    var towel_patterns = lines[0].split(', ')
+
+    # The remaining lines after a blank line are the desired designs
+    var blank_line_index = lines.index('')
+    var desired_designs = lines[blank_line_index + 1:]
+
+    return (towel_patterns, desired_designs)
+
+def can_construct_design(design, patterns):
+    var memo: Bool
+    """Check if the design can be constructed using the given patterns."""
+    def can_construct(remaining, memo):
+        if remaining in memo:
+            return memo[remaining]
+        if remaining == "":
+            return True
+        for pattern in patterns:
+            if remaining.startswith(pattern):
+                if can_construct(remaining[len(pattern):], memo):
+                    memo[remaining] = True
+                    return True
+        memo[remaining] = False
+        return False
+
+    return can_construct(design, {})
+
+def count_possible_designs(file_path):
+    towel_patterns2 = parse_input(file_path)
+    desired_designs2 = parse_input(file_path)
+    
+    # Count the number of possible designs
+    possible_count = 0
+    for design in desired_designs2:
+        if can_construct_design(design, towel_patterns2):
+            possible_count += 1
+
+    return possible_count
+
+def count_arrangements(design, patterns):
+    """Count the number of ways the design can be constructed."""
+    def count_ways(remaining, memo):
+        if remaining in memo:
+            return memo[remaining]
+        if remaining == "":
+            return 1
+        total_ways = 0
+        for pattern in patterns:
+            if remaining.startswith(pattern):
+                total_ways += count_ways(remaining[len(pattern):], memo)
+        memo[remaining] = total_ways
+        return total_ways
+
+    return count_ways(design, {})
+
+def total_arrangements(file_path):
+    towel_patterns3 = parse_input(file_path) 
+    desired_designs3 = parse_input(file_path)
+
+    total_ways = 0
+    for design in desired_designs3:
+        total_ways += count_arrangements(design, towel_patterns3)
+
+    return total_ways
+
+fn main() raises:
+    var input_file = "input.txt"  # Replace with the actual input file path
+
+    # Part 1: Count possible designs
+    var possible_designs = count_possible_designs(input_file)
+    print("Number of possible designs: " + str(possible_designs))
+
+    # Part 2: Total number of arrangements
+    var total_ways = total_arrangements(input_file)
+    print("Total number of arrangements: " + str(total_ways))
+

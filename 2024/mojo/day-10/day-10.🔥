@@ -1,2 +1,82 @@
-fn main():
-    print("Day 10 Mojo solutions marker")
+# Day 10: Hoof It
+from collections.list import List
+from builtin.tuple import Tuple
+from collections.set import Set
+from collections.string import String
+
+def parse_map(file_path: String) -> List[List[int]]:
+    with open(file_path, 'r') as f:
+        return [list(map(int, line.strip())) for line in f.readlines()]
+
+def get_neighbors(x: int, y: int, rows: int, cols: int) -> List[Tuple[int, int]]:
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+    neighbors = []
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < rows and 0 <= ny < cols:
+            neighbors.append((nx, ny))
+    return neighbors
+
+def find_trailhead_score(map_data: List[List[int]], x: int, y: int, rows: int, cols: int) -> int:
+    visited = set()
+    stack = [(x, y)]
+    reachable_nines = set()
+
+    while stack:
+        cx, cy = stack.pop()
+        if (cx, cy) in visited:
+            continue
+        visited.add((cx, cy))
+
+        for nx, ny in get_neighbors(cx, cy, rows, cols):
+            if (nx, ny) not in visited and map_data[nx][ny] == map_data[cx][cy] + 1:
+                stack.append((nx, ny))
+
+            if map_data[nx][ny] == 9:
+                reachable_nines.add((nx, ny))
+
+    return len(reachable_nines)
+
+def find_trailhead_rating(map_data: List[List[int]], x: int, y: int, rows: int, cols: int) -> int:
+    paths = set()
+    stack = [(x, y, ())]  # (current x, current y, current path)
+
+    while stack:
+        cx, cy, path = stack.pop()
+        new_path = path + ((cx, cy),)
+
+        if map_data[cx][cy] == 9:
+            paths.add(new_path)
+            continue
+
+        for nx, ny in get_neighbors(cx, cy, rows, cols):
+            if map_data[nx][ny] == map_data[cx][cy] + 1:
+                stack.append((nx, ny, new_path))
+
+    return len(paths)
+
+def calculate_trailhead_metrics(map_data: List[List[int]], part: int) -> int:
+    rows, cols = len(map_data), len(map_data[0])
+    total_metric = 0
+
+    for r in range(rows):
+        for c in range(cols):
+            if map_data[r][c] == 0:  # Trailhead found
+                if part == 1:
+                    total_metric += find_trailhead_score(map_data, r, c, rows, cols)
+                elif part == 2:
+                    total_metric += find_trailhead_rating(map_data, r, c, rows, cols)
+
+    return total_metric
+
+fn main() raises:
+    input_file = "input.txt"  # Replace with your input file
+    topographic_map = parse_map(input_file)
+
+    # Part 1: Sum of trailhead scores
+    part_one_result = calculate_trailhead_metrics(topographic_map, part=1)
+    print("Part 1: Sum of trailhead scores: ", part_one_result)
+
+    # Part 2: Sum of trailhead ratings
+    part_two_result = calculate_trailhead_metrics(topographic_map, part=2)
+    print("Part 2: Sum of trailhead ratings: ", part_two_result)

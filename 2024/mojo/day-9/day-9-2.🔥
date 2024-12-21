@@ -1,73 +1,95 @@
-from time import perf_counter
-
-# Part 1 and 2 solutions incomplete. See aoc-cheat-sheet for complete solutions in Python.
+# Day 9: Disk Fragmenter
+# Part 1 and 2 solutions incomplete. See aoc-proofing-repo for complete solutions in Python.
 # - this is challenging!
+from collections.string import String
+import time
 
-def read_input(file_name):
-    """Reads input from a file."""
-    with open(file_name, 'r') as file:
-        return file.readline().strip()
+def parse_disk_map(disk_map: String):
+    """Parse the disk map and generate the initial block representation."""
+    blocks = []
+    file_id = 0
 
-def parse_disk_map(disk_map):
-    """Parses the disk map into a detailed representation of files and free spaces."""
-    parsed_map = []
-    file_lengths = []
-    free_space_lengths = []
     for i in range(0, len(disk_map), 2):
         file_length = int(disk_map[i])
-        free_space_length = int(disk_map[i + 1])
-        file_lengths.append(file_length)
-        free_space_lengths.append(free_space_length)
-        parsed_map.extend([len(file_lengths) - 1] * file_length)  # File IDs
-        parsed_map.extend(['.'] * free_space_length)  # Free spaces
-    return parsed_map, file_lengths
+        free_length = int(disk_map[i + 1])
 
-def move_whole_files(disk, file_lengths):
-    """Compacts the disk by moving whole files to the leftmost span of free space."""
-    for file_id in range(len(file_lengths) - 1, -1, -1):
-        file_length = file_lengths[file_id]
-        file_positions = [i for i, block in enumerate(disk) if block == file_id]
-        if not file_positions:
-            continue
+        blocks.extend([str(file_id)] * file_length)
+        blocks.extend(['.'] * free_length)
 
-        # Find leftmost span of free space that can fit file
-        for i in range(len(disk)):
-            if disk[i] == '.' and all(disk[j] == '.' for j in range(i, i + file_length if i + file_length <= len(disk) else i)):
-                # Move file to location
-                for pos in file_positions:
-                    disk[pos] = '.'
-                for j in range(file_length):
-                    disk[i + j] = file_id
-                break
+        if file_length > 0:
+            file_id += 1
 
-    return disk
+    return ''.join(blocks)
 
-def calculate_checksum(disk):
-    """Calculates the filesystem checksum based on the compacted disk."""
+def compact_disk(blocks: str) -> str:
+    """Compact the disk by moving file blocks one at a time to the leftmost free space."""
+    blocks = list(blocks)
+    for i in range(len(blocks) - 1, -1, -1):
+        if blocks[i] != '.':
+            for j in range(len(blocks)):
+                if blocks[j] == '.':
+                    blocks[j], blocks[i] = blocks[i], blocks[j]
+                    break
+    return ''.join(blocks)
+
+def calculate_checksum(blocks: str) -> int:
+    """Calculate the filesystem checksum."""
     checksum = 0
-    for position, block in enumerate(disk):
+    for position, block in enumerate(blocks):
         if block != '.':
             checksum += position * int(block)
     return checksum
 
-def main():
-    start_time = perf_counter()
+def compact_disk_whole_files(blocks: str) -> str:
+    """Compact the disk by moving whole files to the leftmost free space."""
+    blocks = list(blocks)
+    file_positions = {}
 
-    # Read and parse input
-    input_file = 'input.txt'
-    disk_map = read_input(input_file)
-    disk, file_lengths = parse_disk_map(disk_map)
+    # Determine file positions and lengths
+    for index, block in enumerate(blocks):
+        if block != '.' and int(block) not in file_positions:
+            file_positions[int(block)] = []
+        if block != '.':
+            file_positions[int(block)].append(index)
 
-    # Compact disk move whole files
-    compacted_disk = move_whole_files(disk, file_lengths)
+    # Sort files by descending file ID
+    for file_id in sorted(file_positions.keys(), reverse=True):
+        file_indices = file_positions[file_id]
+        file_length = len(file_indices)
 
-    # Calculate checksum
-    checksum = calculate_checksum(compacted_disk)
+        # Find the leftmost contiguous free space
+        for i in range(len(blocks) - file_length + 1):
+            if all(block == '.' for block in blocks[i:i + file_length]):
+                # Move the file
+                for idx in file_indices:
+                    blocks[idx] = '.'
+                for j in range(file_length):
+                    blocks[i + j] = str(file_id)
+                break
 
-    end_time = perf_counter()
-    execution_time = end_time - start_time
+    return ''.join(blocks)
 
-    print("Checksum:" + str(checksum))
-    print("Execution Time:" + str(execution_time) + " seconds")
+fn main() raises:
+    input_file = "input.txt"  # Replace with your actual input file
+    with open(input_file, 'r') as f:
+        disk_map = f.read().strip()
+
+    # Part 1: Compact disk block by block
+    start_time_part_1 = time.perf_counter_ns()
+    initial_blocks = parse_disk_map(disk_map)
+    compacted_blocks = compact_disk(initial_blocks)
+    checksum_part_1 = calculate_checksum(compacted_blocks)
+    end_time_part_1 = time.perf_counter_ns()
+    print("Part 1: Filesystem checksum: ", checksum_part_1)
+    print("Part 1 Execution Time (ns): ", end_time_part_1 - start_time_part_1)
+
+    # Part 2: Compact disk by moving whole files
+    start_time_part_2 = time.perf_counter_ns()
+    compacted_whole_files = compact_disk_whole_files(initial_blocks)
+    checksum_part_2 = calculate_checksum(compacted_whole_files)
+    end_time_part_2 = time.perf_counter_ns()
+    print("Part 2: Filesystem checksum: ", checksum_part_2)
+    print("Part 2 Execution Time (ns): ", end_time_part_2 - start_time_part_2)
+
 
 

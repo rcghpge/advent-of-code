@@ -1,2 +1,185 @@
-fn main():
-    print("Day 21 marker")
+from collections.list import List
+from builtin.tuple import Tuple
+from collections import list
+from collections.dict import Dict
+from collections import dict
+from builtin.int import Int
+from builtin import int
+from collections.string import String
+from collections import string
+from builtin import range
+
+# Read input data
+def read_data(file_path: String) -> List[String]:
+    with open(file_path, "r") as file:
+        return file.read()
+
+# Define keypad and arrows
+    var keypad = [
+    List[String]("7", "8", "9"),
+    List[String]("4", "5", "6"),
+    List[String]("1", "2", "3"),
+    List[String](" ", "0", "A") 
+    ]
+
+    var arrows = [
+    List[String](" ^A"), 
+    List[String]("<v>")
+    ]
+
+    # Build dictionaries
+    var keypad_dict = Dict[String, Tuple[Int, Int]]()
+    for i in range(keypad):
+        for j in range(len(keypad[i])):
+            var c = String(keypad[i][j])     
+            keypad_dict[c] = Tuple(i, j)
+
+    var arrows_dict = Dict[String, Tuple[Int, Int]]()
+    for i in range(len(arrows)):
+        for j in range(len(arrows[i])):
+            var c = String(arrows[i][j])
+            arrows_dict[c] = Tuple(i, j)
+
+# Quantify strokes on arrows keypad
+def quantify_strokes(code: String) -> Int:
+    var curr = arrows_dict['A']
+    var total = 0
+    for x in code:
+        var coords = arrows_dict[x]
+        total += abs(coords[0] - curr[0]) + abs(coords[1] - curr[1]) + 1
+        curr = coords
+    return total
+
+# Recursive keystroke calculation on arrows keypad
+def num_pad_keystrokes(code: String, recurse: Int) -> Int:
+    if recurse == 0:
+        return quantify_strokes(code)
+    curr = arrows_dict['A']
+    var avoid_pad = arrows_dict[' ']
+    var total_num = 0
+    for x in code:
+        coords = arrows_dict[x]
+        var dy = coords[0] - curr[0]
+        var dx = coords[1] - curr[1]
+        var s = 'v' * dy if dy > 0 else '^' * (-dy)
+        s += '>' * dx if dx > 0 else '<' * (-dx)
+        var min_keystrokes = float('inf')
+        var s_permutations = generate_permutations(s)
+        for p in s_permutations:
+            var n = curr
+            for char in p:
+                if char == 'v':
+                    n = (n[0] + 1, n[1])
+                elif char == '^':
+                    n = (n[0] - 1, n[1])
+                elif char == '>':
+                    n = (n[0], n[1] + 1)
+                elif char == '<':
+                    n = (n[0], n[1] - 1)
+                if n == avoid_pad:
+                    break
+            if n == avoid_pad:
+                continue
+            var min_keystrokes = min(num_pad_keystrokes(''.join(p) + 'A', recurse - 1), min_keystrokes)
+        curr = coords
+        total_num += min_keystrokes
+    return total_num
+
+# Keystroke calculation on keypad
+def part1_keystrokes(code: String) -> Int:
+    curr = keypad_dict['A']
+    avoid_pad = keypad_dict[' ']
+    total_num = 0
+    for x in code:
+        coords = keypad_dict[x]
+        dy = coords[0] - curr[0]
+        dx = coords[1] - curr[1]
+        s = 'v' * dy if dy > 0 else '^' * (-dy)
+        s += '>' * dx if dx > 0 else '<' * (-dx)
+        min_keystrokes = float('inf')
+        s_permutations = generate_permutations(s)
+        for p in s_permutations:
+            n = curr
+            for char in p:
+                if char == 'v':
+                    n = (n[0] + 1, n[1])
+                elif char == '^':
+                    n = (n[0] - 1, n[1])
+                elif char == '>':
+                    n = (n[0], n[1] + 1)
+                elif char == '<':
+                    n = (n[0], n[1] - 1)
+                if n == avoid_pad:
+                    break
+            if n == avoid_pad:
+                continue
+            min_keystrokes = min(num_pad_keystrokes(''.join(p) + 'A', 1), min_keystrokes)
+        curr = coords
+        total_num += min_keystrokes
+    return total_num
+
+def part2_keystrokes(code_sequence: String) -> Int:
+    curr = keypad_dict['A']
+    avoid_pad = keypad_dict[' ']
+    total_num = 0
+    for x in code_sequence:
+        coords = keypad_dict[x]
+        dy = coords[0] - curr[0]
+        dx = coords[1] - curr[1]
+        s = 'v' * dy if dy > 0 else '^' * (-dy)
+        s += '>' * dx if dx > 0 else '<' * (-dx)
+        min_keystrokes = float('inf')
+        s_permutations = generate_permutations(s)
+        for p in s_permutations:
+            n = curr
+            for char in p:
+                if char == 'v':
+                    n = (n[0] + 1, n[1])
+                elif char == '^':
+                    n = (n[0] - 1, n[1])
+                elif char == '>':
+                    n = (n[0], n[1] + 1)
+                elif char == '<':
+                    n = (n[0], n[1] - 1)
+                if n == avoid_pad:
+                    break
+            if n == avoid_pad:
+                continue
+            min_keystrokes = min(num_pad_keystrokes(''.join(p) + 'A', 24), min_keystrokes)
+        curr = coords
+        total_num += min_keystrokes
+    return total_num
+
+# Generate permutations manually
+def generate_permutations(sequence: String) -> List[String]:
+    if len(sequence) <= 1:
+        return [sequence]
+    var permutations_list = []
+    for i in range(len(sequence)):
+       for char in range(len(sequence[i])):
+           for perm in generate_permutations(sequence[:i] + sequence[i+1:]):
+               permutations_list.append(char + perm)
+    return permutations_list
+
+# Part 1
+def part1(data: List[String]) -> Int:
+    var calculate = 0
+    for line in data:
+        var number_val = line.strip()[:-1]
+        calculate += part1_keystrokes(line.strip()) * int(number_val)
+    return calculate
+
+# Part 2
+def part2(data: List[String]) -> Int:
+    calculate = 0
+    for line in data:
+        var number_val = line.strip()[:-1]
+        calculate += part2_keystrokes(line.strip()) * int(number_val)
+    return calculate
+
+fn main() raises:
+    var input_file = "input.txt"
+    var data = read_data(input_file)
+    print("Part 1: ", + part1(data))
+    print("Part 2: ", + part2(data))
+

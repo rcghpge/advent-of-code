@@ -1,2 +1,91 @@
-fn main():
-    print("Day 13 Mojo solutions marker")
+# Day 13 Claw Contraption
+from builtin.tuple import Tuple
+from collections.list import List
+from collection.optional import Optional
+
+def parse_input(file_path: str) -> List[Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]]:
+    machines = []
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+        for i in range(0, len(lines), 4):
+            a_line = lines[i].strip().split(' ')
+            b_line = lines[i + 1].strip().split(' ')
+            prize_line = lines[i + 2].strip().split(' ')
+            
+            a_x, a_y = int(a_line[1][2:]), int(a_line[2][2:])
+            b_x, b_y = int(b_line[1][2:]), int(b_line[2][2:])
+            prize_x, prize_y = int(prize_line[1][2:]), int(prize_line[2][2:])
+            
+            machines.append(((a_x, a_y), (b_x, b_y), (prize_x, prize_y)))
+    return machines
+
+def extended_gcd(a: int, b: int) -> Tuple[int, int, int]:
+    if b == 0:
+        return (a, 1, 0)
+    else:
+        gcd, x1, y1 = extended_gcd(b, a % b)
+        x = y1
+        y = x1 - (a // b) * y1
+        return (gcd, x, y)
+
+def find_min_tokens(Ax: int, Ay: int, Bx: int, By: int, Px: int, Py: int, costA: int, costB: int, max_presses: int = 100) -> Optional[int]:
+    gcd_x, x_coeff_x, y_coeff_x = extended_gcd(Ax, Bx)
+    gcd_y, x_coeff_y, y_coeff_y = extended_gcd(Ay, By)
+
+    if Px % gcd_x != 0 or Py % gcd_y != 0:
+        return None  # No solution exists
+
+    scale_x = Px // gcd_x
+    scale_y = Py // gcd_y
+
+    nA_x = x_coeff_x * scale_x
+    nB_x = y_coeff_x * scale_x
+    nA_y = x_coeff_y * scale_y
+    nB_y = y_coeff_y * scale_y
+
+    # Adjust solutions to be non-negative
+    # Use modular arithmetic to shift solutions into the valid range
+    t_x = max((-(nA_x // (Bx // gcd_x))), -(nB_x // (Ax // gcd_x)))
+    t_y = max((-(nA_y // (By // gcd_y))), -(nB_y // (Ay // gcd_y)))
+
+    nA_x += t_x * (Bx // gcd_x)
+    nB_x += t_x * (Ax // gcd_x)
+    nA_y += t_y * (By // gcd_y)
+    nB_y += t_y * (Ay // gcd_y)
+
+    if nA_x < 0 or nB_x < 0 or nA_y < 0 or nB_y < 0:
+        return None
+
+    cost_x = nA_x * costA + nB_x * costB
+    cost_y = nA_y * costA + nB_y * costB
+
+    return cost_x + cost_y
+
+def calculate_total_cost(machines: List[Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]], max_presses: int = 100) -> int:
+    total_cost = 0
+    for a, b, prize in machines:
+        cost = find_min_tokens(a[0], a[1], b[0], b[1], prize[0], prize[1], 3, 1, max_presses)
+        if cost is not None:
+            total_cost += cost
+    return total_cost
+
+def update_prizes_for_part_two(machines: List[Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]], offset: int = 10000000000000) -> List[Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]]:
+    updated_machines = []
+    for a, b, prize in machines:
+        updated_prize = (prize[0] + offset, prize[1] + offset)
+        updated_machines.append((a, b, updated_prize))
+    return updated_machines
+
+fn main() raises:
+    input_file = "input.txt"  # Replace with the path to your input file
+    machines = parse_input(input_file)
+
+    # Part 1: Calculate total cost for the original prizes
+    part_one_cost = calculate_total_cost(machines)
+    print("Part 1: Total cost to win all possible prizes: ", part_one_cost)
+
+    # Part 2: Update prizes and calculate total cost
+    updated_machines = update_prizes_for_part_two(machines)
+    part_two_cost = calculate_total_cost(updated_machines, max_presses=1000000)
+    print("Part 2: Total cost to win all possible prizes with updated prizes: ", part_two_cost)
+

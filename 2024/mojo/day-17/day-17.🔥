@@ -1,2 +1,127 @@
-fn main():
-    print("Day 17 marker")
+from python import Python  # Import Python compatibility
+from python import *
+from os import *
+from testing import *
+from collections import *
+
+
+# Part 1
+def part1(filename) -> String:
+    data = open("input.txt", "r").read().strip()
+    # Split into blocks
+    blocks = data.split("\n\n")
+    regs = blocks.Dict[String, Int]()  # Registers dictionary
+
+    # Parse registers
+    for line in blocks[0].splitlines():
+        key = line.split(" ")[1].split(":")[0]
+        value = int(line.split(" ")[-1])
+        regs[key] = value
+
+    # Parse program instructions
+    prog = list(map(int, blocks[1].split(": ")[1].split(",")))
+    ptr = 0
+    out = []
+
+    # Execute instructions
+    while ptr < len(prog) - 1:
+        old_ptr = ptr
+        opcode = prog[ptr]
+        literal_operand = prog[ptr + 1]
+
+        combo_operand = literal_operand
+        if combo_operand > 3:
+            reg_name = chr(ord("A") + combo_operand - 4)
+            combo_operand = regs[reg_name]
+
+        if opcode == 0:
+            regs["A"] = regs["A"] // (2 ** combo_operand)
+        elif opcode == 1:
+            regs["B"] = regs["B"] ^ literal_operand
+        elif opcode == 2:
+            regs["B"] = combo_operand % 8
+        elif opcode == 3:
+            if regs["A"] != 0:
+                ptr = literal_operand
+        elif opcode == 4:
+            regs["B"] = regs["B"] ^ regs["C"]
+        elif opcode == 5:
+            out.append(combo_operand % 8)
+        elif opcode == 6:
+            regs["B"] = regs["A"] // (2 ** combo_operand)
+        elif opcode == 7:
+            regs["C"] = regs["A"] // (2 ** combo_operand)
+
+        if ptr == old_ptr:
+            ptr += 2
+
+    # Print Part 1 output
+    print("Part 1:", join(map(str, out), ","))
+
+# Part 2
+def run(a: Python.int, prog: Python.list[Python.int]) -> Python.list[Python.int]:
+    b = 0
+    c = 0
+    ptr = 0
+    out = []
+
+    while ptr < len(prog) - 1:
+        old_ptr = ptr
+        opcode = prog[ptr]
+        literal_operand = prog[ptr + 1]
+
+        combo_operand = literal_operand
+        if combo_operand == 4:
+            combo_operand = a
+        elif combo_operand == 5:
+            combo_operand = b
+        elif combo_operand == 6:
+            combo_operand = c
+
+        if opcode == 0:
+            a = a // (2 ** combo_operand)
+        elif opcode == 1:
+            b = b ^ literal_operand
+        elif opcode == 2:
+            b = combo_operand % 8
+        elif opcode == 3:
+            if a != 0:
+                ptr = literal_operand
+        elif opcode == 4:
+            b = b ^ c
+        elif opcode == 5:
+            out.append(combo_operand % 8)
+        elif opcode == 6:
+            b = a // (2 ** combo_operand)
+        elif opcode == 7:
+            c = a // (2 ** combo_operand)
+
+        if ptr == old_ptr:
+            ptr += 2
+
+    return out
+
+def part2(filename) -> String:
+    # Read input file
+    data = open("input.txt", "r").read().strip()
+    blocks = data.split("\n\n")
+    prog = list(map(int, blocks[1].split(": ")[1].split(",")))
+
+    a = 0
+    for i in range(len(prog) - 1, -1, -1):
+        target = prog[i:]
+
+        while run(a, prog) != target:
+            a += 1
+
+        if i == 0:
+            print("Part 2:", a)
+        else:
+            a *= 8
+
+# Main Function
+fn main() raises:
+    part1(data)
+    part2(data)
+
+

@@ -56,7 +56,7 @@ def calculate_total_calibration(input_file):
 
     return total_calibration
 
-def main():
+fn main() raises:
     """
     Main function to execute the calculation.
     """
@@ -67,9 +67,6 @@ def main():
     total_calibration_result = calculate_total_calibration(input_file)
     end_time = perf_counter_ns()
 
-    print("Total calibration result: {total_calibration_result}")
-    print("Execution time:" ((end_time - start_time) / 1_000_000:.4f) "milliseconds")
-
-if __name__ == "__main__":
-    main()
+    print("Total calibration result: ", total_calibration_result)
+    print("Execution time: " + int((end_time - start_time) / 1000000) + "milliseconds")
 

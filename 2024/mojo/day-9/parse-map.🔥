@@ -1,6 +1,6 @@
 from math import iota
 
-# rd4com's parse map soltuion
+# rd4com's parse map solution
 def main():
     map = SIMD[DType.int8, 256](-1)
     tmp = "4114501151"

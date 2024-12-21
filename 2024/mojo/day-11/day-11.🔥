@@ -1,2 +1,48 @@
-fn main():
-    print("Day 11 Mojo solutions marker")
+# Day 11: Plutonian Pebbles
+from collections.list import List
+
+def split_number(n: Int) -> List[Int]:
+    """Split a number into two halves."""
+    digits = str(n)
+    mid = len(digits) // 2
+    left = int(digits[:mid]) if digits[:mid] else 0
+    right = int(digits[mid:]) if digits[mid:] else 0
+    return [left, right]
+
+def transform_stones(stones: List[int]) -> List[int]:
+    """Apply the transformation rules to the stones."""
+    new_stones = []
+    for stone in stones:
+        if stone == 0:
+            new_stones.append(1)
+        elif len(str(stone)) % 2 == 0:
+            new_stones.extend(split_number(stone))
+        else:
+            new_stones.append(stone * 2024)
+    return new_stones
+
+def simulate_stones(initial_stones: List[int], blinks: int) -> int:
+    """Simulate the evolution of stones for a given number of blinks."""
+    stones = initial_stones[:]
+    for _ in range(blinks):
+        stones = transform_stones(stones)
+    return len(stones)
+
+def read_input(file_path: str) -> List[int]:
+    """Read the input data from a file."""
+    with open(file_path, 'r') as f:
+        return list(map(int, f.read().strip().split()))
+
+fn main() raises:
+    # Read input from file
+    input_file = "input.txt"  # Replace with the actual path to input.txt
+    input_stones = read_input(input_file)
+
+    # Part 1: Stones after 25 blinks
+    stones_after_25 = simulate_stones(input_stones, 25)
+    print("Part 1: Number of stones after 25 blinks: ", stones_after_25)
+
+    # Part 2: Stones after 75 blinks
+    stones_after_75 = simulate_stones(input_stones, 75)
+    print("Part 2: Number of stones after 75 blinks: ", stones_after_75)
+

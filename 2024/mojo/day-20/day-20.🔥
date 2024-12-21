@@ -1,2 +1,72 @@
+fn parse_input(file_path: str) -> (list[list[char]], int, int, (int, int), (int, int)):
+    """Parse the input file and return the grid and start/end points."""
+    var grid = list[list[char]]()
+    var start = (0, 0)
+    var end = (0, 0)
+    var h = 0
+    var w = 0
+
+    with open(file_path, "r") as f:
+        for y, line in enumerate(f.readlines()):
+            var row = list[char](line.strip())
+            grid.append(row)
+            for x, cell in enumerate(row):
+                if cell == 'S':
+                    start = (x, y)
+                elif cell == 'E':
+                    end = (x, y)
+            w = len(row)
+        h = len(grid)
+    
+    return (grid, w, h, start, end)
+
+fn bfs_shortest_path(grid: list[list[char]], w: int, h: int, start: (int, int), end: (int, int)) -> int:
+    """Compute the shortest path using BFS."""
+    var queue = [(start[0], start[1], 0)]  # (x, y, distance)
+    var visited = set()
+    visited.insert(start)
+
+    while queue:
+        var x, y, dist = queue.pop(0)
+        if (x, y) == end:
+            return dist
+        
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            var nx, ny = x + dx, y + dy
+            if nx >= 0 and nx < w and ny >= 0 and ny < h and (nx, ny) not in visited:
+                if grid[ny][nx] in ['.', 'E']:
+                    visited.insert((nx, ny))
+                    queue.append((nx, ny, dist + 1))
+    return -1  # No path found
+
+fn count_valid_cheats(grid: list[list[char]], w: int, h: int, start: (int, int), end: (int, int), cheat_range: int) -> int:
+    """Count the number of valid cheats saving at least 100."""
+    var normal_distance = bfs_shortest_path(grid, w, h, start, end)
+    if normal_distance == -1:
+        return 0
+
+    var valid_cheats = 0
+    for y in range(h):
+        for x in range(w):
+            if grid[y][x] == '#':
+                grid[y][x] = '.'  # Temporarily remove wall
+                var cheat_distance = bfs_shortest_path(grid, w, h, start, end)
+                grid[y][x] = '#'  # Restore wall
+
+                if cheat_distance != -1 and normal_distance - cheat_distance >= 100:
+                    valid_cheats += 1
+    return valid_cheats
+
 fn main():
-    print("Day 20 marker")
+    """Main function to solve the problem."""
+    var file_path = "input.txt"
+    var grid, w, h, start, end = parse_input(file_path)
+
+    # Part 1: Cheat range = 2
+    var part_1_result = count_valid_cheats(grid, w, h, start, end, cheat_range=2)
+    print(f"Part 1: {part_1_result}")
+
+    # Part 2: Cheat range = 20
+    var part_2_result = count_valid_cheats(grid, w, h, start, end, cheat_range=20)
+    print(f"Part 2: {part_2_result}")
+

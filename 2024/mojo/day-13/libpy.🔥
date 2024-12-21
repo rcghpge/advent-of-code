@@ -1,0 +1,38 @@
+# Testing Python - Mojo functionality
+from python import Python
+
+fn main() raises:
+    # This is equivalent to Python's `import numpy as np`
+    var np = Python.import_module("numpy")
+    var a = np.array([1, 2, 3])
+    print(a)
+    
+    # Networkx library
+    var nx = Python.import_module("networkx")
+    var G = nx.Graph()
+    G.add_edge(1,2)
+    var e = (1, 2, 3, 4, 5)
+    G.add_edge(*e) # unpack edge tuple
+
+import matplotlib.pyplot as plt
+    var plt = Python.import_modul("matplotlib.pyplot")
+
+    # Create an empty graph
+    G = nx.Graph()
+
+    # Add nodes
+    G.add_nodes_from([1, 2, 3, 4])
+
+     # Add edges
+     G.add_edges_from([(1, 2), (2, 3), (3, 4), (4, 1)])
+
+     # Draw the graph
+     nx.draw(G, with_labels=True, node_color='lightblue', node_size=700, font_size=12, font_color='darkblue')
+ 
+     # Show the plot
+     plt.title("Simple NetworkX Graph")
+     plt.show()
+
+
+# Testing out Mojo's functionality as I've been going thru AoC 2024.
+# Needs alot of work to be a 1 to 1 and eventually a superset to Python

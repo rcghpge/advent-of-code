@@ -1,0 +1,162 @@
+# Day 17
+from collections import List, InlineList
+from collections.string import String, atol, atof
+from collections.dict import Dict
+from builtin import file
+from builtin.str import str
+from builtin.len import len
+from builtin.int import int
+from collections.dict import KeyElement
+from max.graph.checkpoint import load
+from memory.pointer import Pointer
+
+
+@value
+struct StringKey(KeyElement):
+    var s: String
+
+    fn __init__(inout self, owned s: String):
+        self.s = s
+
+    fn __hash__(self) -> UInt:
+        return hash(self.s)
+
+    fn __eq__(self, other: Self) -> Bool:
+        return self.s == other.s
+     
+    fn __ne__(self, other: Self) -> Bool:
+        return self.s != other.s
+
+# Function to safely read input from a file
+fn read_file(filename: String) raises -> String:
+    try:
+        var handle = file.open(filename, "r")  # Open file for reading
+        var content: String = handle.read()  # Read content as a string
+        handle.close()  # Close the file
+        return content.strip()  # Return stripped content
+    except:
+        print("Error: Unable to open or read the file:", filename)
+        return ""  # Return empty string if file read fails
+
+# Function to simulate the program and return the output sequence
+fn run_program(initial_a: Int, prog: InlineList[Int, 16]) -> List[Int]:
+    var a: Int = initial_a  # Local copy of the input parameter
+    var b: Int = 0
+    var c: Int = 0
+    var ptr: Int = 0
+    var out: List[Int] = List(16)  # Initialize with a capacity of 16
+
+    while ptr < len(prog) - 1:
+        var old_ptr: Int = ptr
+        var opcode: Int = prog[ptr]
+        var literal_operand: Int = prog[ptr + 1]
+
+        var combo_operand: Int = literal_operand
+        if combo_operand == 4:
+            combo_operand = a
+        elif combo_operand == 5:
+            combo_operand = b
+        elif combo_operand == 6:
+            combo_operand = c
+
+        if opcode == 0:
+            a = a // (2 ** combo_operand)
+        elif opcode == 1:
+            b = b ^ literal_operand
+        elif opcode == 2:
+            b = combo_operand % 8
+        elif opcode == 3 and a != 0:
+            ptr = literal_operand
+        elif opcode == 4:
+            b = b ^ c
+        elif opcode == 5:
+            out.append(combo_operand % 8)
+        elif opcode == 6:
+            b = a // (2 ** combo_operand)
+        elif opcode == 7:
+            c = a // (2 ** combo_operand)
+
+        if ptr == old_ptr:
+            ptr += 2  # Advance pointer if no jump occurs
+    return out
+
+# Part 1: Process initial A and output program result
+fn part1(filename: String) raises:
+    var data: String = read_file(filename)
+    if data == "":
+        return  # Exit if the file couldn't be read
+
+    # Split data into blocks InlineList[String, 16]
+    var list_blocks: List[String] = data.split("\n\n")
+    var blocks: List[String] = List[String]()
+    var block: Pointer[String] = List[String, 16]()
+    var actual_block: String = block.load()
+    for block in list_blocks:
+        blocks.append(actual_block) # Dereference block to pass string
+
+    # Parse registers
+    var regs: Dict[StringKey, Int] = Dict[StringKey, Int]()
+    for line in blocks[0].split("\n"):
+        var parts: List[String] = line[].split(" ")
+        if len(parts) >= 0: 
+            var temp_key: String = parts[1] 
+            var key: Int = int(temp_key)
+            var temp_val: String = parts[-1]
+            var value: Int = atol(temp_val)
+            regs[key] = value
+        prog.append(blocks)
+
+
+    # Parse program instructions
+    var prog: InlineList[Int, 16] = InlineList[Int, 16]()
+    for x in blocks[1].split(": ")[1].split(","):
+        prog.append(atol(x))
+
+    # Run program
+    var result = run_program(regs["A"], prog)
+    var string_results: List[String] = List[String]()
+    for x in result:
+        string_results.append(str(x))
+    var output: String = ",".join(string_results)
+    print("Part 1 Output:", output)
+
+# Function to compare two Lists for equality
+fn list_equal(list1: List[Int], list2: List[Int]) -> Bool:
+    if len(list1) != len(list2):
+        return False
+    for i in range(len(list1)):
+        if list1[i] != list2[i]:
+            return False
+    return True
+
+# Part 2: Find the smallest A that reproduces the program output
+fn part2(filename: String) raises:
+    var data: String = read_file(filename)
+    if data == "":
+        return  # Exit if the file couldn't be read
+
+    # Parse program
+    var list_blocks: List[String] = data.split("\n\n")
+    var blocks: InlineList[String, 16] = InlineList[String, 16]()
+    for block in list_blocks:
+        blocks.append(block[]) # Dereference block to pass string
+
+    var prog: InlineList[Int, 16] = InlineList[Int, 16]()
+    for x in blocks[1].split(": ")[1].split(","):
+        prog.append(atol(x[]))
+
+    # Reverse-engineering the target output
+    var a: Int = 0
+    var target_output: List[Int] = run_program(0, prog)  # Simulated expected output
+
+    while not list_equal(run_program(a, prog), target_output):
+        a += 8  # Incrementing by 8 for optimization
+
+    print("Part 2 Output (Lowest valid A):", a)
+
+# Main Function
+fn main() raises:
+    var filename: String = "input.txt"
+    part1(filename)
+    part2(filename)
+

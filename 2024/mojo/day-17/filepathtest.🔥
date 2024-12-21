@@ -1,0 +1,16 @@
+from builtin.file import open
+from os.pathlike import PathLike
+from collections.string import String
+
+fn read_input(filename: String) -> String:
+    try:
+        with open(filename, "r") as file:
+            return file.read().strip()
+    except:
+        print("Error reading file:")
+        return ""
+
+fn main() raises:
+    var data: String = read_input("input.txt")
+    print(data)
+

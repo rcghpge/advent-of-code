@@ -1,0 +1,84 @@
+# Day 14 Restroom Redoubt
+from collections.list import List
+from builtin.tuple import Tuple
+
+def parse_input(file_path: str) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
+    robots = []
+    with open(file_path, 'r') as f:
+        for line in f:
+            parts = line.strip().split()
+            pos = tuple(map(int, parts[0][2:].split(',')))
+            vel = tuple(map(int, parts[1][2:].split(',')))
+            robots.append((pos, vel))
+    return robots
+
+def wrap_position(x: int, y: int, width: int, height: int) -> Tuple[int, int]:
+    return x % width, y % height
+
+def simulate_robots(robots: List[Tuple[Tuple[int, int], Tuple[int, int]]], width: int, height: int, seconds: int) -> List[Tuple[int, int]]:
+    positions = []
+    for pos, vel in robots:
+        new_x = pos[0] + vel[0] * seconds
+        new_y = pos[1] + vel[1] * seconds
+        wrapped_pos = wrap_position(new_x, new_y, width, height)
+        positions.append(wrapped_pos)
+    return positions
+
+def count_quadrants(positions: List[Tuple[int, int]], width: int, height: int) -> List[int]:
+    half_width, half_height = width // 2, height // 2
+    quadrants = [0, 0, 0, 0]  # Top-left, Top-right, Bottom-left, Bottom-right
+
+    for x, y in positions:
+        if x == half_width or y == half_height:
+            continue  # Skip middle robots
+
+        if x < half_width and y < half_height:
+            quadrants[0] += 1
+        elif x >= half_width and y < half_height:
+            quadrants[1] += 1
+        elif x < half_width and y >= half_height:
+            quadrants[2] += 1
+        elif x >= half_width and y >= half_height:
+            quadrants[3] += 1
+
+    return quadrants
+
+def safety_factor(quadrants: List[int]) -> int:
+    result = 1
+    for count in quadrants:
+        result *= count
+    return result
+
+def find_easter_egg(robots: List[Tuple[Tuple[int, int], Tuple[int, int]]], width: int, height: int) -> int:
+    seconds = 0
+    while True:
+        positions = simulate_robots(robots, width, height, seconds)
+        min_x = min(pos[0] for pos in positions)
+        max_x = max(pos[0] for pos in positions)
+        min_y = min(pos[1] for pos in positions)
+        max_y = max(pos[1] for pos in positions)
+
+        if max_x - min_x < 20 and max_y - min_y < 20:  # Detect compact grouping
+            print(f"Time {seconds} seconds: Potential Easter egg detected.")
+            break
+
+        seconds += 1
+
+    return seconds
+
+fn main() raises:
+    input_file = "input.txt"  # Replace with your input file
+    width, height = 101, 103
+
+    robots = parse_input(input_file)
+
+    # Part 1: Calculate the safety factor
+    positions = simulate_robots(robots, width, height, 100)
+    quadrants = count_quadrants(positions, width, height)
+    safety = safety_factor(quadrants)
+    print("Part 1: Safety factor after 100 seconds: ", safety)
+
+    # Part 2: Find the fewest seconds for the Easter egg
+    easter_egg_time = find_easter_egg(robots, width, height)
+    print("Part 2: Fewest seconds for Easter egg: ", easter_egg_time)
+

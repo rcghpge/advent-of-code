@@ -1,2 +1,83 @@
-fn main():
-    print("Day 12 Mojo solutions marker")
+# Day 12: Garden Groups
+from collections import deque
+from collections.list import List
+from collections.dict import Dict
+from builtin.tuple import Tuple
+from collections.string import String
+
+def parse_map(file_path: String) -> List[List[String]]:
+    with open(file_path, 'r') as f:
+        return [list(line.strip()) for line in f.readlines()]
+
+def get_neighbors(x: int, y: int, rows: int, cols: int) -> List[Tuple[int, int]]:
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+    neighbors = []
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < rows and 0 <= ny < cols:
+            neighbors.append((nx, ny))
+    return neighbors
+
+def bfs(map_data: List[List[str]], visited: List[List[bool]], start: Tuple[int, int]) -> Tuple[int, int, int]:
+    rows, cols = len(map_data), len(map_data[0])
+    queue = deque([start])
+    visited[start[0]][start[1]] = True
+
+    plant_type = map_data[start[0]][start[1]]
+    area = 0
+    perimeter = 0
+    sides = 0
+
+    while queue:
+        x, y = queue.popleft()
+        area += 1
+        local_sides = 0
+
+        for nx, ny in get_neighbors(x, y, rows, cols):
+            if map_data[nx][ny] == plant_type:
+                if not visited[nx][ny]:
+                    visited[nx][ny] = True
+                    queue.append((nx, ny))
+            else:
+                perimeter += 1  # Neighbor is not part of the region
+        
+        # Count the number of unique sides
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nx, ny = x + dx, y + dy
+            if not (0 <= nx < rows and 0 <= ny < cols) or map_data[nx][ny] != plant_type:
+                local_sides += 1
+
+        sides += local_sides
+
+    return area, perimeter, sides
+
+def calculate_prices(map_data: List[List[str]], part: int) -> int:
+    rows, cols = len(map_data), len(map_data[0])
+    visited = [[False] * cols for _ in range(rows)]
+
+    total_price = 0
+
+    for r in range(rows):
+        for c in range(cols):
+            if not visited[r][c]:
+                area, perimeter, sides = bfs(map_data, visited, (r, c))
+
+                if part == 1:
+                    total_price += area * perimeter
+                elif part == 2:
+                    total_price += area * sides
+
+    return total_price
+
+fn main() raises:
+    input_file = "input.txt"  # Replace with your input file
+    garden_map = parse_map(input_file)
+
+    # Part 1
+    part_one_price = calculate_prices(garden_map, part=1)
+    print("Part 1: Total price of fencing all regions: " part_one_price)
+
+    # Part 2
+    part_two_price = calculate_prices(garden_map, part=2)
+    print("Part 2: Total price of fencing all regions with bulk discount: ", part_two_price)
+

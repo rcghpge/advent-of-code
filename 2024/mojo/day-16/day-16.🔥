@@ -1,2 +1,108 @@
-fn main():
-    print("Day 16 marker")
+from collections import deque
+
+def parse_input(file_path):
+    with open(file_path, 'r') as f:
+        maze = [list(line.strip()) for line in f.readlines()]
+    return maze
+
+def find_start_and_end(maze):
+    start, end = None, None
+    for r, row in enumerate(maze):
+        for c, cell in enumerate(row):
+            if cell == 'S':
+                start = (r, c)
+            elif cell == 'E':
+                end = (r, c)
+    return start, end
+
+def is_valid_move(maze, r, c):
+    return 0 <= r < len(maze) and 0 <= c < len(maze[0]) and maze[r][c] != '#'
+
+def bfs_shortest_path(maze, start, end):
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # Right, Down, Left, Up
+    queue = deque([(start[0], start[1], 0, 0)])  # (row, col, steps, rotations)
+    visited = set()
+    visited.add((start[0], start[1], 0))
+
+    while queue:
+        r, c, steps, facing = queue.popleft()
+
+        if (r, c) == end:
+            return steps + facing * 1000
+
+        for i, (dr, dc) in enumerate(directions):
+            nr, nc = r + dr, c + dc
+            new_facing = (facing + i) % 4
+            if is_valid_move(maze, nr, nc) and (nr, nc, new_facing) not in visited:
+                visited.add((nr, nc, new_facing))
+                queue.append((nr, nc, steps + 1, new_facing))
+
+    return float('inf')
+
+def find_best_paths(maze, start, end):
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # Right, Down, Left, Up
+    queue = deque([(start[0], start[1], 0, 0, [])])  # (row, col, steps, rotations, path)
+    visited = {}
+
+    best_score = float('inf')
+    best_paths = []
+
+    while queue:
+        r, c, steps, facing, path = queue.popleft()
+
+        if (r, c) == end:
+            score = steps + facing * 1000
+            if score < best_score:
+                best_score = score
+                best_paths = [path + [(r, c)]]
+            elif score == best_score:
+                best_paths.append(path + [(r, c)])
+            continue
+
+        for i, (dr, dc) in enumerate(directions):
+            nr, nc = r + dr, c + dc
+            new_facing = (facing + i) % 4
+            new_path = path + [(r, c)]
+            if is_valid_move(maze, nr, nc):
+                state = (nr, nc, new_facing)
+                if state not in visited or visited[state] > steps + 1:
+                    visited[state] = steps + 1
+                    queue.append((nr, nc, steps + 1, new_facing, new_path))
+
+    return best_paths
+
+def mark_best_path_tiles(maze, best_paths):
+    marked_maze = [row[:] for row in maze]
+    for path in best_paths:
+        for r, c in path:
+            if marked_maze[r][c] not in ('S', 'E'):
+                marked_maze[r][c] = 'O'
+    return marked_maze
+
+def solve_part_one(file_path):
+    maze = parse_input(file_path)
+    start, end = find_start_and_end(maze)
+    return bfs_shortest_path(maze, start, end)
+
+def solve_part_two(file_path):
+    maze = parse_input(file_path)
+    start, end = find_start_and_end(maze)
+    best_paths = find_best_paths(maze, start, end)
+    marked_maze = mark_best_path_tiles(maze, best_paths)
+    count_tiles = sum(row.count('O') for row in marked_maze)
+    return count_tiles, marked_maze
+
+fn main() raises:
+    input_file = "input.txt"  # Replace with your input file
+
+    # Part 1
+    part_one_result = solve_part_one(input_file)
+    print(f"Part 1: Lowest score: {part_one_result}")
+
+    # Part 2
+    part_two_result, marked_maze = solve_part_two(input_file)
+    print(f"Part 2: Number of tiles on best paths: {part_two_result}")
+    print("Marked Maze:")
+    for row in marked_maze:
+        print(''.join(row))
+
