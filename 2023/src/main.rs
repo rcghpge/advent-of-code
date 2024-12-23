@@ -60,7 +60,7 @@ fn main() {
     day_7::run();
 
     // Run Day 8
-    println!("Day 8:");
+    println!("Day 8: Haunted Wasteland");
     day_8::run();
 
     // Run Day 9
