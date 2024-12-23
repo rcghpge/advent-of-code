@@ -1,2 +1,95 @@
-fn main():
-    print("Day 23 marker")
+from python import Python 
+
+# Define a structure to represent the graph
+struct Graph:
+    var adj_list: Dict[String, List[String]] = Dict()
+
+    # Method to add an undirected edge between two nodes
+    fn add_edge(self, node1: String, node2: String):
+        if not self.adj_list.contains(node1):
+            self.adj_list[node1] = []
+        if not self.adj_list.contains(node2):
+            self.adj_list[node2] = []
+        self.adj_list[node1].append(node2)
+        self.adj_list[node2].append(node1)
+
+    # Method to retrieve neighbors of a given node
+    fn get_neighbors(self, node: String) -> List[String]:
+        return self.adj_list.get(node, [])
+
+    # Method to find all triangles in the graph
+    fn find_triangles(self) -> List[Tuple[String, String, String]]:
+        var triangles: List[Tuple[String, String, String]] = []
+        for (node, neighbors) in self.adj_list.items():
+            for i in range(len(neighbors)):
+                for j in range(i + 1, len(neighbors)):
+                    neighbor1 = neighbors[i]
+                    neighbor2 = neighbors[j]
+                    if self.adj_list.get(neighbor1, []).contains(neighbor2):
+                        triangle = (node, neighbor1, neighbor2)
+                        triangles.append(triangle)
+        return triangles
+
+    # Method to filter triangles containing at least one node starting with a given prefix
+    fn filter_triangles_by_prefix(self, triangles: List[Tuple[String, String, String]], prefix: String) -> List[Tuple[String, String, String]]:
+        var filtered: List[Tuple[String, String, String]] = []
+        for triangle in triangles:
+            if triangle[0].startswith(prefix) or triangle[1].startswith(prefix) or triangle[2].startswith(prefix):
+                filtered.append(triangle)
+        return filtered
+
+    # Method to find the largest clique in the graph
+    fn find_largest_clique(self) -> List[String]:
+        var max_clique: List[String] = []
+        var nodes = self.adj_list.keys()
+        for i in range(len(nodes)):
+            for j in range(i + 1, len(nodes)):
+                clique = [nodes[i], nodes[j]]
+                for k in range(j + 1, len(nodes)):
+                    candidate = nodes[k]
+                    if all(self.adj_list.get(candidate, []).contains(member) for member in clique):
+                        clique.append(candidate)
+                if len(clique) > len(max_clique):
+                    max_clique = clique
+        return max_clique
+
+# Function to read the input file and construct the graph
+fn read_input_file(filename: String) -> Graph:
+    var graph = Graph()
+    with open(filename, 'r') as file:
+        for line in file:
+            parts = line.strip().split('-')
+            if len(parts) == 2:
+                node1 = parts[0]
+                node2 = parts[1]
+                graph.add_edge(node1, node2)
+    return graph
+
+# Function to generate the password from the largest clique
+fn generate_password(clique: List[String]) -> String:
+    return ",".join(sorted(clique))
+
+# Main function to execute the solution
+fn main() raises:
+    var input_file = "input.txt"  # Ensure this file exists in the same directory
+    var graph = read_input_file(input_file)
+
+    # Part 1: Find and filter triangles
+    var triangles = graph.find_triangles()
+    var filtered_triangles = graph.filter_triangles_by_prefix(triangles, "t")
+
+    # Display a sample of filtered triangles
+    print("Sample of Filtered Triangles (up to 3):")
+    for triangle in filtered_triangles[:3]:
+        print(triangle)
+
+    print(f"Number of triangles containing at least one 't': {len(filtered_triangles)}")
+
+    # Part 2: Find the largest clique and generate the password
+    var largest_clique = graph.find_largest_clique()
+    var password = generate_password(largest_clique)
+
+    print(f"\nLargest Clique: {largest_clique}")
+    print(f"The password to get into the LAN party is: {password}")
+
+
