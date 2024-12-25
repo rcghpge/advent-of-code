@@ -64,7 +64,7 @@ fn main() {
     day_8::run();
 
     // Run Day 9
-    println!("Day 9:");
+    println!("Day 9: Mirage Maintenance");
     day_9::run();
 
     // Run Day 10

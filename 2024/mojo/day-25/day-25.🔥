@@ -1,2 +1,63 @@
-fn main():
-    print("Day 25 marker")
+from collections.string import String
+from python import Python
+import time
+
+def process_file_optimized(filename: String):
+    # Import NumPy
+    var np = Python.import_module("numpy")
+
+    # Read and process the input file
+    with open(filename, "r") as f:
+        var raw_content = f.read().strip()  # Strip content first
+    var content = raw_content.split("\n\n")  # Split after stripping
+
+    var lock_codes = []
+    var key_codes = []
+
+    # Process schematics
+    for schematic in content:
+        var lines = schematic.split("\n")
+        if lines[0] == "#####" and lines[-1] == ".....":  # Lock schematic
+            var array = np.array([list(line) for line in lines[1:]])
+            lock_codes.append(np.sum(array == "#", axis=0))
+        elif lines[0] == "....." and lines[-1] == "#####":  # Key schematic
+            array = np.array([list(line) for line in lines[:-1]])
+            key_codes.append(np.sum(array == "#", axis=0))
+
+    var lock_matrix = np.array(lock_codes)
+    var key_matrix = np.array(key_codes)
+
+    var matches = {}
+    var match_count = 0
+
+    # Vectorized compatibility check
+    for lock in lock_matrix:
+        var valid_keys = key_matrix[np.all((lock + key_matrix) <= 5, axis=1)]
+        for key in valid_keys:
+            match_count += 1
+            var lock_tuple = tuple(lock.tolist())
+            if lock_tuple not in matches:
+                matches[lock_tuple] = []
+            matches[lock_tuple].append(key.tolist())
+
+    return match_count, matches
+
+fn main() raises:
+    start_time = time.perf_counter()
+    match_count, matches = process_file_optimized("input.txt")
+    end_time = time.perf_counter()
+
+    # Calculate execution time
+    execution_time = end_time - start_time
+
+    # Determine time unit and format output accordingly
+    if execution_time < 1:
+        execution_time *= 1000  # Convert to milliseconds
+        time_unit = "milliseconds"
+    else:
+        time_unit = "seconds"
+
+    # Print results
+    print("Match Count:", match_count)
+    print("Execution Time:", execution_time, time_unit)
+
