@@ -1,33 +1,52 @@
-# Ignore build directories
+# Build artifacts
 build/
 build_gcc/
 build_clang/
-
-# Ignore external libraries
-lib/
-lib/libuv/
-
-# Ignore object files and compiled binaries
 *.o
 *.exe
-day*
-
-# Ignore logs and temporary files
 *.log
-*.tmp
 
-# Ignore editor and IDE-specific files
-.vscode/
-.idea/
+# External libraries (optional)
+lib/libuv/
+lib/*.a
+lib/*.so
+lib/*.dylib
+
+# Temporary files and editor backups
+*.tmp
+*.bak
 *.swp
 *.swo
-
-# Ignore system-specific files
-.DS_Store
+*.DS_Store
 Thumbs.db
 
-# Ignore generated files
+# Compiled binaries for examples
+examples/example
+examples/hello
+
+# Python virtual environments (if applicable)
+venv/
+env/
+
+# Generated files
 *.out
-*.a
-*.so
+*.obj
+
+# Exclude specific directories but keep their structure
+!include/
+!tests/
+!data/
+!examples/
+
+# Ensure data and examples directories are tracked but ignore their generated content
+data/*.tmp
+examples/*.log
+
+# Node and npm (if JavaScript utilities are used)
+node_modules/
+npm-debug.log*
+
+# Ignore setup artifacts (if any)
+setup.log
+setup.*
 
