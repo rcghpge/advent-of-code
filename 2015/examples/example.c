@@ -21,6 +21,7 @@ int main() {
 
 // Compile the C program
 // gcc -o example example.c -luv
+// clang -o example example.c -luv
 
 // Run the compiled program
 // ./example

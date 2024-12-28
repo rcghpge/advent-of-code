@@ -7,6 +7,7 @@ int main() {
 
 // Compile the C program
 // gcc -o hello hello.c
+// clang -o hello hello.c
 
 // Run the compiled program
 // ./hello
