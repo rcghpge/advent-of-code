@@ -1,0 +1,33 @@
+# Ignore build directories
+build/
+build_gcc/
+build_clang/
+
+# Ignore external libraries
+lib/
+lib/libuv/
+
+# Ignore object files and compiled binaries
+*.o
+*.exe
+day*
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore editor and IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore generated files
+*.out
+*.a
+*.so
+
