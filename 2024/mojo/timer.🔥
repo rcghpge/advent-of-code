@@ -2,12 +2,13 @@
 from time import perf_counter_ns
 from builtin.io import print
 from builtin.str import str
+
 fn main() raises:
     var start = perf_counter_ns()
     print("Hello World! I am learning Mojo this year!" + chr(0x1F525))
     var end = perf_counter_ns()
     var elapsed_ns = end - start
-    var elapsed_s = elapsed_ns/1000000000
-    print("Elapsed time:" + str(elapsed_s) + " seconds)")
+    var elapsed_ms = elapsed_ns/1000000
+    print("Execution time: " + str(elapsed_ms) + " ms")
 
 
