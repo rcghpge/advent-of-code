@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 aoc2023 = "0.1.0"
+hashbrown = "0.15.2"
 itertools = "0.13.0"
 num = "0.4.3"
 regex = "1.7.0"
