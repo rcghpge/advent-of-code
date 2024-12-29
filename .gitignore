@@ -1,6 +1,10 @@
-
 # pixi environments
 .pixi
 *.egg-info
+
 # magic environments
 .magic
+
+# subrepo directories
+2015/lib/*
+2025/lib/libuv/*
