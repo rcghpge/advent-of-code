@@ -136,11 +136,11 @@ Input validation complete: Found 24 out of 25 files.
 
 ## Dependencies
 
-- [**GCC:**](https://gcc.gnu.org/onlinedocs/)GNU Compiler Collection
-- [**Clang:**](https://clang.llvm.org/docs/index.html)LLVM Compiler
-- [**Make:**](https://www.gnu.org/software/make/manual/make.html)Build automation tool
-- [**libuv:**](https://libuv.org/)Cross-platform asynchronous I/O library
-- [**cURL:**](https://curl.se/docs/manpage.html)Command-line tool for fetching input data
+- [**GCC:**](https://gcc.gnu.org/onlinedocs/) GNU Compiler Collection
+- [**Clang:**](https://clang.llvm.org/docs/index.html) LLVM Compiler
+- [**Make:**](https://www.gnu.org/software/make/manual/make.html) Build automation tool
+- [**libuv:**](https://libuv.org/) Cross-platform asynchronous I/O library
+- [**cURL:**](https://curl.se/docs/manpage.html) Command-line tool for fetching input data
 
 ---
 
