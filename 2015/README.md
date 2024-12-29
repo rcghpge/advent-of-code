@@ -2,6 +2,8 @@
 
 # Advent of Code 2015 - C Language
 
+**WIP** - Currently before I start school again
+
 Welcome to the **Advent of Code 2015** directory in the C programming language! This repository provides solutions to the Advent of Code 2015 challenges, written in C with support for both **GCC** and **Clang** compilers. The project is designed for portability, robustness, and flexibility.
 
 ---
@@ -75,6 +77,11 @@ To build all components (e.g., `aoc`, `gcc2`, `clang2`, examples):
 ```bash
 make all
 ```
+Install Makefile workflow environment config
+
+```bash
+make install
+```
 
 ### Run Solutions
 
@@ -90,15 +97,15 @@ gcc2 1
 clang2 1
 ```
 
-- Run all solutions with both GCC and Clang:
+- Run all solutions with both compilers:
 
 ```bash
 main all
 ```
 
-### Example Programs
+### Examples in C
 
-Run example programs provided in the `examples/` directory:
+Run example in c provided in the `examples/` directory:
 
 ```bash
 example       # Run the libuv timer example
