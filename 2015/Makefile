@@ -1,97 +1,127 @@
 # Build instructions
 
 # Compiler and flags
-CC_GCC = gcc
 CC_CLANG = clang
+CC_GCC = gcc
+LINKER_CLANG = lld
+LINKER_GCC = gold
 CFLAGS = -Wall -I./include
-LDFLAGS = -L./lib -luv
+LDFLAGS = -lcurl
 
 # Directories
 SRC_DIR = src
 DATA_DIR = data
-BUILD_DIR_GCC = build_gcc
-BUILD_DIR_CLANG = build_clang
-OBJ_DIR_GCC = $(BUILD_DIR_GCC)/obj
-OBJ_DIR_CLANG = $(BUILD_DIR_CLANG)/obj
+BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
+OBJ_DIR_GCC = $(OBJ_DIR)/gcc
+OBJ_DIR_CLANG = $(OBJ_DIR)/clang
+INSTALL_DIR = /usr/local/bin
+LIB_AOC_DIR = lib/aoc
 
 # Source files
 MAIN_SRC = $(SRC_DIR)/main.c
 DAY_SOURCES = $(wildcard $(SRC_DIR)/day*.c)
+LIB_AOC_SOURCES = $(LIB_AOC_DIR)/aoc.c
 HEADERS = $(wildcard include/*.h)
 
 # Object files
-OBJ_FILES_GCC = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_GCC)/%.o, $(MAIN_SRC) $(DAY_SOURCES))
-OBJ_FILES_CLANG = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_CLANG)/%.o, $(MAIN_SRC) $(DAY_SOURCES))
+GCC_OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_GCC)/%.o, $(MAIN_SRC) $(DAY_SOURCES))
+CLANG_OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_CLANG)/%.o, $(MAIN_SRC) $(DAY_SOURCES))
 
 # Executables
-EXECUTABLE_GCC = $(BUILD_DIR_GCC)/2015_solutions_gcc
-EXECUTABLE_CLANG = $(BUILD_DIR_CLANG)/2015_solutions_clang
+EXECUTABLE_AOC = $(BUILD_DIR)/aoc/aoc
+EXECUTABLE_GCC = $(BUILD_DIR)/gcc/gcc2
+EXECUTABLE_CLANG = $(BUILD_DIR)/clang/clang2
+EXECUTABLE_MAIN = $(BUILD_DIR)/main/main
+EXECUTABLE_EXAMPLE = $(BUILD_DIR)/example
+EXECUTABLE_HELLO = $(BUILD_DIR)/hello
 
 # Default target
-all: validate_inputs gcc clang
+all: aoc gcc2 clang2 main example hello
 
-# Validate input files (allow partial validation)
-validate_inputs:
-	@echo "Validating input files in $(DATA_DIR)..."
-	@if [ ! -d $(DATA_DIR) ]; then \
-		echo "Error: Data directory $(DATA_DIR) is missing. Please create it and add input files."; \
-		exit 1; \
-	fi
-	@found_files=0; \
-	missing_files=0; \
-	for i in `seq 1 25`; do \
-		if [ -f $(DATA_DIR)/$$i.txt ]; then \
-			found_files=$$((found_files + 1)); \
-		else \
-			echo "Warning: Input file $(DATA_DIR)/$$i.txt is missing."; \
-			missing_files=$$((missing_files + 1)); \
-		fi; \
-	done; \
-	if [ $$found_files -eq 0 ]; then \
-		echo "Error: No input files found in $(DATA_DIR)."; \
-		exit 1; \
-	fi; \
-	echo "Input validation complete: Found $$found_files out of 25 files."
+# Build aoc executable
+aoc: $(EXECUTABLE_AOC)
 
-# GCC build target
-gcc: $(EXECUTABLE_GCC)
+$(EXECUTABLE_AOC): $(LIB_AOC_SOURCES) $(HEADERS)
+	@mkdir -p $(BUILD_DIR)/aoc
+	@echo "Building aoc executable: $@"
+	$(CC_GCC) $(CFLAGS) -fuse-ld=$(LINKER_GCC) -DSTANDALONE_AOC $(LIB_AOC_SOURCES) -o $@ $(LDFLAGS)
 
-$(EXECUTABLE_GCC): $(OBJ_FILES_GCC)
-	$(CC_GCC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+# Build custom gcc2 compiler
+gcc2: $(EXECUTABLE_GCC)
+
+$(EXECUTABLE_GCC): $(GCC_OBJECTS)
+	@mkdir -p $(BUILD_DIR)/gcc
+	@echo "Building GCC2 executable: $@"
+	$(CC_GCC) $(CFLAGS) -fuse-ld=$(LINKER_GCC) $^ -o $@ $(LDFLAGS)
 
 $(OBJ_DIR_GCC)/%.o: $(SRC_DIR)/%.c $(HEADERS)
-	mkdir -p $(OBJ_DIR_GCC)
+	@mkdir -p $(OBJ_DIR_GCC)
+	@echo "Compiling with GCC: $<"
 	$(CC_GCC) $(CFLAGS) -c $< -o $@
 
-# Clang build target
-clang: $(EXECUTABLE_CLANG)
+# Build custom clang2 compiler
+clang2: $(EXECUTABLE_CLANG)
 
-$(EXECUTABLE_CLANG): $(OBJ_FILES_CLANG)
-	$(CC_CLANG) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+$(EXECUTABLE_CLANG): $(CLANG_OBJECTS)
+	@mkdir -p $(BUILD_DIR)/clang
+	@echo "Building Clang2 executable: $@"
+	$(CC_CLANG) $(CFLAGS) -fuse-ld=$(LINKER_CLANG) $^ -o $@ $(LDFLAGS)
 
 $(OBJ_DIR_CLANG)/%.o: $(SRC_DIR)/%.c $(HEADERS)
-	mkdir -p $(OBJ_DIR_CLANG)
+	@mkdir -p $(OBJ_DIR_CLANG)
+	@echo "Compiling with Clang: $<"
 	$(CC_CLANG) $(CFLAGS) -c $< -o $@
 
-# Run GCC build
-run_gcc: validate_inputs
-	@echo "Running GCC build..."
-	./$(EXECUTABLE_GCC)
+# Build unified main compiler (both compilers)
+main: gcc2 clang2
+	@echo "Creating unified executable for both compilers: $(EXECUTABLE_MAIN)"
+	@mkdir -p $(BUILD_DIR)/main
+	@echo "#!/bin/bash" > $(EXECUTABLE_MAIN)
+	@echo "$(BUILD_DIR)/gcc/gcc2 all" >> $(EXECUTABLE_MAIN)
+	@echo "$(BUILD_DIR)/clang/clang2 all" >> $(EXECUTABLE_MAIN)
+	@echo "$(BUILD_DIR)/main/main all" >> $(EXECUTABLE_MAIN)
+	@chmod +x $(EXECUTABLE_MAIN)
 
-# Run Clang build
-run_clang: validate_inputs
-	@echo "Running Clang build..."
-	./$(EXECUTABLE_CLANG)
+# Build example executable
+example: $(EXECUTABLE_EXAMPLE)
 
-# Run both GCC and Clang builds
-run_all: validate_inputs
-	@echo "Running all 25 days with GCC and Clang..."
-	@echo "GCC Output:"
-	./$(EXECUTABLE_GCC)
-	@echo "Clang Output:"
-	./$(EXECUTABLE_CLANG)
+$(EXECUTABLE_EXAMPLE): examples/example.c
+	@mkdir -p $(BUILD_DIR)/examples
+	@echo "Building example executable: $@"
+	$(CC_CLANG) $(CFLAGS) -fuse-ld=$(LINKER_CLANG) $< -o $@ $(LDFLAGS) -luv
 
-# Clean up build artifacts
+# Build hello executable
+hello: $(EXECUTABLE_HELLO)
+
+$(EXECUTABLE_HELLO): examples/hello.c
+	@mkdir -p $(BUILD_DIR)/examples
+	@echo "Building hello executable: $@"
+	$(CC_CLANG) $(CFLAGS) -fuse-ld=$(LINKER_CLANG) $< -o $@ $(LDFLAGS)
+
+# Install all executables globally
+install: aoc gcc2 clang2 main example hello
+	@echo "Installing executables to /usr/local/bin..."
+	@sudo cp $(EXECUTABLE_AOC) /usr/local/bin/aoc
+	@sudo cp $(EXECUTABLE_GCC) /usr/local/bin/gcc2
+	@sudo cp $(EXECUTABLE_CLANG) /usr/local/bin/clang2
+	@sudo cp $(EXECUTABLE_MAIN) /usr/local/bin/main
+	@sudo cp $(EXECUTABLE_EXAMPLE) /usr/local/bin/example
+	@sudo cp $(EXECUTABLE_HELLO) /usr/local/bin/hello
+	@sudo chmod +x /usr/local/bin/aoc /usr/local/bin/gcc2 /usr/local/bin/clang2 /usr/local/bin/main /usr/local/bin/example /usr/local/bin/hello
+
+# Makefile checkpoint for compilers and aoc library
+verify:
+	@echo "Current PATH:"
+	@echo $$PATH
+	@echo "If necessary, add /usr/local/bin to your PATH:"
+	@echo 'export PATH=/usr/local/bin:$$PATH'
+	@echo "Installation of workflow environment complete!"
+
+# Clean build artifacts and remove globally installed executables
 clean:
-	rm -rf $(BUILD_DIR_GCC) $(BUILD_DIR_CLANG)
+	@rm -rf $(BUILD_DIR)
+	@echo "Cleaning workflow environment..."
+	@sudo rm -f /usr/local/bin/aoc /usr/local/bin/gcc2 /usr/local/bin/clang2 /usr/local/bin/main /usr/local/bin/example /usr/local/bin/hello
+	@echo "Workflow environment cleaning complete."
 

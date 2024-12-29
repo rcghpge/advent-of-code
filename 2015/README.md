@@ -1,96 +1,115 @@
+---
+
 # Advent of Code 2015 - C Language
 
-Welcome to the Advent of Code 2015 directory in the C programming language! This directory contains solutions to the Advent of Code 2015 challenges written in C. The directory is designed to support both GCC and Clang compilers, ensuring portability and flexibility.
+Welcome to the **Advent of Code 2015** directory in the C programming language! This repository provides solutions to the Advent of Code 2015 challenges, written in C with support for both **GCC** and **Clang** compilers. The project is designed for portability, robustness, and flexibility.
 
 ---
 
 ## Directory Structure
 
-```
+```plaintext
 2015/
-├── Makefile            # Automates building, running, and cleaning the project
-├── README.md           # Documentation of directory
+├── Makefile            # Automates building, running, cleaning, and installing the project
+├── README.md           # Documentation of the project
 ├── setup.sh            # Script to set up the environment and dependencies
 ├── data/               # Input files for each challenge
 │   ├── 1.txt           # Input for Day 1
-│   └── ...             # Inputs for Days 2-25
+│   └── ...             # Inputs for Days 2–25
 ├── examples/           # Example scripts and binaries (e.g., libuv timer demo)
 │   ├── example         # Compiled binary for example.c
-│   ├── example.c       # timer example
+│   ├── example.c       # Libuv timer example
 │   ├── hello           # Compiled binary for hello.c
 │   └── hello.c         # Simple "Hello, World!" example
 ├── include/            # Header files
-│   ├── day1.h
-│   └── ...             # Headers for Days 3–25
+│   ├── day1.h          # Header for Day 1 solution
+│   └── ...             # Headers for Days 2–25
 ├── lib/                # External libraries (e.g., libuv)
+│   └── aoc/            # Advent of Code utilities
 ├── src/                # Source files for each day's solution
 │   ├── main.c          # Main entry point
 │   ├── day1.c          # Solution for Day 1
-│   └── ...             # Solutions for Days 3–25
+│   └── ...             # Solutions for Days 2–25
 └── tests/              # Test files (optional)
+    ├── test.c          # Test utilities
+    └── ...             # Additional test files
 ```
 
 ---
 
 ## Setup Instructions
+
 ### Step 1: Run the Setup Script
 
 Run the setup script to initialize your environment:
 
-```
+```bash
 ./setup.sh
 ```
 
 This script:
-- Ensures **GCC**, **Clang**, and **Make** are installed.
-- Downloads and builds **libuv** if needed.
-- Creates necessary directories (`data/`, `build_gcc/`, `build_clang/`).
-- Validates input files in the `data/` directory.
+- Ensures **GCC**, **Clang**, **Make**, and other dependencies are installed.
+- Configures your environment and sets up the **Advent of Code session cookie**.
+- Creates necessary directories (`data/`, `build/`, `examples/`).
+- Builds and installs all executables globally (e.g., `aoc`, `gcc2`, `clang2`, etc.).
 
-### Step 2: Add Input Files
+### Step 2: Fetch Input Data
 
-Pull input data for each day in the data/ directory:
+Pull input data for each day into the `data/` directory using the `aoc` command. For example:
 
-- `1.txt`
-- ...
-- `25.txt`
+```bash
+aoc 1 2015       # Fetch input for Day 1 of 2015
+aoc all 2015     # Fetch inputs for all days of 2015
+```
+
+This will store input files like `data/1.txt`, `data/2.txt`, etc.
 
 ---
 
 ## Building and Running
+
 ### Build the Project
 
-To build the project with both GCC and Clang, use the following command:
+To build all components (e.g., `aoc`, `gcc2`, `clang2`, examples):
 
-```
+```bash
 make all
 ```
 
-### Run the Solutions
+### Run Solutions
 
-- Run the GCC-compiled executable:
+- Run a specific day's solution using GCC:
 
-```
-make run_gcc
-```
-
-- Run the Clang-compiled executable:
-
-```
-make run_clang
+```bash
+gcc2 1
 ```
 
-- Run both builds sequentially:
+- Run a specific day's solution using Clang:
 
+```bash
+clang2 1
 ```
-make run_all
+
+- Run all solutions with both GCC and Clang:
+
+```bash
+main all
 ```
 
-### Clean the Project
+### Example Programs
 
-To remove all build artifacts and start fresh:
+Run example programs provided in the `examples/` directory:
 
+```bash
+example       # Run the libuv timer example
+hello         # Run the Hello World example
 ```
+
+### Clean Workflow Environment
+
+To remove all build artifacts and reset the environment:
+
+```bash
 make clean
 ```
 
@@ -98,30 +117,20 @@ make clean
 
 ## Input Validation
 
-The Makefile validates that the input files are present in the data/ directory:
+The `Makefile` validates that input files are present in the `data/` directory. If input files are missing or incomplete, appropriate warnings or errors are displayed.
 
-- If no input files are found:
+- Example error message if no input files are found:
 
-```
+```plaintext
 Error: No input files found in data/.
 ```
 
-- If only some files are present, warnings are displayed:
+- Example warning if some files are missing:
 
-```
+```plaintext
 Warning: Input file data/2.txt is missing.
-Input validation complete: Found 1 out of 25 files.
+Input validation complete: Found 24 out of 25 files.
 ```
-
----
-
-## Contributing
-
-You are welcome to contribute by:
-
-- Providing feedback on how to improve overall directory and repository..
-- Improving code readability or efficiency.
-- Submitting issues or pull requests.
 
 ---
 
@@ -129,11 +138,38 @@ You are welcome to contribute by:
 
 This project depends on the following tools and libraries:
 
-- **GCC:** GNU Compiler Collection
-- **Clang:** LLVM Compiler
+- **GCC (Custom version):** GNU Compiler Collection
+- **Clang (Custom version):** LLVM Compiler
 - **Make:** Build automation tool
 - **libuv:** Cross-platform asynchronous I/O library
+- **cURL:** Command-line tool for fetching input data
 
 ---
 
-Happy coding! 
+## Contributing
+
+Contributions are welcome! Here’s how you can help:
+- Provide feedback on improving the directory structure or code readability.
+- Submit pull requests to optimize solutions or address issues.
+- Add test cases to improve solution coverage and robustness.
+
+---
+
+## Troubleshooting
+
+### Common Issues:
+1. **Executable Not Found:**
+   - Ensure the `setup.sh` script completed without errors.
+   - Verify that executables are in your `PATH` using `which <command>`.
+
+2. **Input Data Missing:**
+   - Use the `aoc` command to fetch input data for specific days.
+
+3. **Compiler Conflicts:**
+   - Ensure custom GCC (`gcc2`) and Clang (`clang2`) compilers are correctly configured.
+
+For additional help, submit an issue or ask for support.
+
+---
+
+Happy Coding! 🎄

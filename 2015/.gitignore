@@ -1,16 +1,32 @@
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.DS_Store
+*.directory
+*.lock
+*.bak
+
 # Build artifacts
-build/
-build_gcc/
-build_clang/
+build/*
 *.o
 *.exe
 *.log
+*.out
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+*.pdb
 
 # External libraries (optional)
-lib/libuv/
+lib/libuv/build
 lib/*.a
 lib/*.so
 lib/*.dylib
+lib/*
 
 # Temporary files and editor backups
 *.tmp
@@ -23,19 +39,26 @@ Thumbs.db
 # Compiled binaries for examples
 examples/example
 examples/hello
+example
+hello
+aoc
+gcc2
+clang2
+main
 
 # Python virtual environments (if applicable)
 venv/
 env/
 
-# Generated files
-*.out
+# Generated files - documentation
 *.obj
+docs/
+*.pdf
 
 # Exclude specific directories but keep their structure
 !include/
 !tests/
-!data/
+!data/.gitkeep
 !examples/
 
 # Ensure data and examples directories are tracked but ignore their generated content
@@ -49,4 +72,14 @@ npm-debug.log*
 # Ignore setup artifacts (if any)
 setup.log
 setup.*
+
+# Dependency files
+node_nodules/
+vendor/
+.env
+
+# Test coverage files
+*.gcda
+*.gcno
+*.gcov
 

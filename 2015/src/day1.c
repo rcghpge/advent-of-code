@@ -1,24 +1,43 @@
 // Day 1
 #include <stdio.h>
+#include <stdlib.h>
 #include "day1.h"
+#include "main.h"
 
-void solve_day1(FILE *input) {
+#define INPUT_FILE "data/1.txt"
+
+void run_day1() {
     // Marker to indicate Day 1 execution
     printf("=== Day 1: Running Solution ===\n");
 
-    // Example logic to parse input and solve the problem
+    // Open the input file
+    FILE *file = fopen(INPUT_FILE, "r");
+    if (file == NULL) {
+        fprintf(stderr, "Error: Could not open input file %s\n", INPUT_FILE);
+        return;
+    }
+
+    // Initialize result (floor Santa ends up on)
     int result = 0;
     char ch;
 
-    while ((ch = fgetc(input)) != EOF) {
+    // Read and process input instructions
+    while ((ch = fgetc(file)) != EOF) {
         if (ch == '(') {
-            result++;
+            result++; // Up one floor
         } else if (ch == ')') {
-            result--;
+            result--; // Down one floor
+        } else if (ch != '\n' && ch != '\r') {
+            // Ignore invalid characters but warn if found
+            fprintf(stderr, "Warning: Invalid character '%c' in input file, ignoring it.\n", ch);
         }
     }
 
+    // Close the file
+    fclose(file);
+
     // Output the result
-    printf("Day 1 Solution: %d\n", result);
+    printf("Day 1 Solution: Santa ends up on floor %d\n", result);
 }
+
 

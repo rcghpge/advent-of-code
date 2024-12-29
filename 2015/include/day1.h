@@ -1,10 +1,8 @@
-// Day 1 header
 #ifndef DAY1_H
 #define DAY1_H
-#include <stdio.h>
 
-// Function declaration for Day 1 solution
-void solve_day1(FILE *input);
+// Prototype for Day 1 solution
+void run_day1();
 
-#endif
+#endif // DAY1_H
 

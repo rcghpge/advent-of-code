@@ -1,76 +1,87 @@
 #!/bin/bash
 
-echo "Setting up Advent of Code 2015 directory..."
-
-# Update system packages
-echo "Updating system packages..."
-sudo apt-get update -y
-
-# Check for GCC installation
-if ! [ -x "$(command -v gcc)" ]; then
-  echo "GCC is not installed. Installing GCC..."
-  sudo apt-get install gcc -y
-else
-  echo "GCC is already installed."
-fi
-
-# Check for Clang installation
-if ! [ -x "$(command -v clang)" ]; then
-  echo "Clang is not installed. Installing Clang..."
-  sudo apt-get install clang -y
-else
-  echo "Clang is already installed."
-fi
-
-# Install Make if not already installed
-if ! [ -x "$(command -v make)" ]; then
-  echo "Make is not installed. Installing Make..."
-  sudo apt-get install make -y
-else
-  echo "Make is already installed."
-fi
-
-# Install libuv
-if [ ! -d "lib/libuv" ]; then
-  echo "Cloning libuv library..."
-  mkdir -p lib
-  git clone https://github.com/libuv/libuv.git lib/libuv
-  cd lib/libuv
-  echo "Building libuv..."
-  sh autogen.sh && ./configure && make && sudo make install
-  cd ../../
-  echo "libuv installed successfully."
-else
-  echo "libuv is already set up."
-fi
+echo "Setting up Advent of Code environment..."
 
 # Ensure build directories exist
-echo "Ensuring build directories exist..."
-mkdir -p build_gcc build_clang
+echo "Ensuring necessary directories exist..."
 
-# Check for data directory and input files
-if [ ! -d "data" ]; then
-  echo "Creating data directory..."
-  mkdir -p data
-  echo "Place your input files (e.g., 1.txt, 2.txt, ..., 25.txt) in the data/ directory."
-else
-  echo "Checking for input data in the data directory..."
-  for i in {1..25}; do
-    if [ ! -f "data/$i.txt" ]; then
-      echo "Warning: Input file data/$i.txt is missing."
+for dir in build build/obj data build/examples; do
+    if [ -d "$dir" ]; then
+        echo "Directory '$dir' already exists. Skipping creation."
     else
-      echo "Found data/$i.txt."
+        mkdir -p "$dir"
+        echo "Created directory '$dir'."
     fi
-  done
+done
+
+# Prompt for Advent of Code session cookie if not already set
+if [ -z "$AOC_SESSION_COOKIE" ]; then
+    echo "Advent of Code session cookie not found in environment."
+    read -p "Enter your Advent of Code session cookie: " cookie
+    if [ -n "$cookie" ]; then
+        export AOC_SESSION_COOKIE=$cookie
+        echo "Persisting session cookie to ~/.bashrc..."
+        echo "export AOC_SESSION_COOKIE=\"$cookie\"" >> ~/.bashrc
+        source ~/.bashrc
+    else
+        echo "[ERROR] No session cookie provided. Exiting setup."
+        exit 1
+    fi
+else
+    echo "Using existing Advent of Code session cookie."
 fi
 
-# Compile the project with both GCC and Clang
-echo "Compiling directory with GCC..."
-make gcc || { echo "GCC compilation failed"; exit 1; }
+# Clean previous builds
+echo "Cleaning previous builds..."
+make clean || { echo "[ERROR] Clean failed. Check the Makefile."; exit 1; }
 
-echo "Compiling directory with Clang..."
-make clang || { echo "Clang compilation failed"; exit 1; }
+# Build and install everything
+echo "Building and installing executables..."
+make all || { echo "[ERROR] Build failed. Check the Makefile and sources."; exit 1; }
+make install || { echo "[ERROR] Installation failed. Check permissions."; exit 1; }
 
-echo "Setup complete! You can now run your solutions from build_gcc and build_clang directories."
-echo "Use 'make run_gcc', 'make run_clang', or 'make all' to execute the solutions, and ensure input files are in the data/ directory."
+# Verify installation and environment
+echo "Verifying installation..."
+commands=("gcc2" "clang2" "main" "aoc" "example" "hello")
+missing_cmds=0
+
+for cmd in "${commands[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "[WARNING] '$cmd' command is not globally available."
+        missing_cmds=$((missing_cmds + 1))
+    else
+        echo "Verified '$cmd' command is available."
+    fi
+done
+
+# Warn if any commands are missing
+if [ $missing_cmds -ne 0 ]; then
+    echo "[WARNING] Some commands are missing. Ensure executables are correctly installed and PATH is updated."
+else
+    echo "All commands are successfully installed and available globally."
+fi
+
+# Verify compilers and update PATH
+echo "Current PATH: $PATH"
+if ! grep -q "/usr/local/bin" <<< "$PATH"; then
+    echo "Adding /usr/local/bin to PATH..."
+    echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bashrc
+    source ~/.bashrc
+    echo "PATH updated successfully!"
+else
+    echo "/usr/local/bin is already in PATH."
+fi
+
+echo
+echo "Initial workflow environment setup is complete!"
+echo "Complete the final installation through make. Example usage:"
+echo "  aoc 1 2021       # Fetch input for Day 1, Year 2021"
+echo "  aoc all 2021     # Fetch inputs for all days, Year 2021"
+echo "  gcc2 1         # Run Day 1 solution with GCC"
+echo "  clang2 1       # Run Day 1 solution with Clang"
+echo "  main all         # Run all solutions with both GCC and Clang"
+echo "  example          # Run the libuv example program"
+echo "  hello            # Run the Hello World example program"
+echo
+echo "To reset the session cookie, set the environment variable AOC_SESSION_COOKIE or re-run this script."
 

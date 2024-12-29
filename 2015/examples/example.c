@@ -18,10 +18,3 @@ int main() {
     uv_loop_close(loop);
     return 0;
 }
-
-// Compile the C program
-// gcc -o example example.c -luv
-// clang -o example example.c -luv
-
-// Run the compiled program
-// ./example
