@@ -1,5 +1,3 @@
----
-
 # Advent of Code 2015 - C Language
 
 **WIP** - Currently before I start school again
