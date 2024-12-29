@@ -51,7 +51,7 @@ This script:
 - Ensures **GCC**, **Clang**, **Make**, and other dependencies are installed.
 - Configures your environment and sets up the **Advent of Code session cookie**.
 - Creates necessary directories (`data/`, `build/`, `examples/`).
-- Builds and installs all executables globally (e.g., `aoc`, `gcc2`, `clang2`, etc.).
+- Builds and installs tech stack (e.g., `aoc`, `gcc2`, `clang2`, etc.).
 
 ### Step 2: Fetch Input Data
 
@@ -136,13 +136,11 @@ Input validation complete: Found 24 out of 25 files.
 
 ## Dependencies
 
-This project depends on the following tools and libraries:
-
-- **GCC (Custom version):** GNU Compiler Collection
-- **Clang (Custom version):** LLVM Compiler
-- **Make:** Build automation tool
-- **libuv:** Cross-platform asynchronous I/O library
-- **cURL:** Command-line tool for fetching input data
+- [**GCC:**](https://gcc.gnu.org/onlinedocs/)GNU Compiler Collection
+- [**Clang:**](https://clang.llvm.org/docs/index.html)LLVM Compiler
+- [**Make:**](https://www.gnu.org/software/make/manual/make.html)Build automation tool
+- [**libuv:**](https://libuv.org/)Cross-platform asynchronous I/O library
+- [**cURL:**](https://curl.se/docs/manpage.html)Command-line tool for fetching input data
 
 ---
 
@@ -160,16 +158,16 @@ Contributions are welcome! Here’s how you can help:
 ### Common Issues:
 1. **Executable Not Found:**
    - Ensure the `setup.sh` script completed without errors.
-   - Verify that executables are in your `PATH` using `which <command>`.
+   - Verify the stack is in your `PATH` using `which <command>`.
 
 2. **Input Data Missing:**
    - Use the `aoc` command to fetch input data for specific days.
 
 3. **Compiler Conflicts:**
-   - Ensure custom GCC (`gcc2`) and Clang (`clang2`) compilers are correctly configured.
+   - Ensure GCC (`gcc2`) and Clang (`clang2`) compilers are correctly configured.
 
 For additional help, submit an issue or ask for support.
 
 ---
 
-Happy Coding! 🎄
+Happy Coding! =)
