@@ -2,37 +2,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "main.h" // Include run_day and run_all_days
-#include "aoc.h"  // Include fetchDayData function
+#include "aoc.h"  // Include fetch_day_data function
+#include "day1.h"
+
+// Function to read the session cookie from AOC_SESSION_COOKIE
+const char *get_session_cookie() {
+    static char session_cookie[512];
+    FILE *file = fopen("AOC_SESSION_COOKIE", "r");
+    if (!file) {
+        fprintf(stderr, "Error: Could not open AOC_SESSION_COOKIE. Ensure setup.sh has been run.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (!fgets(session_cookie, sizeof(session_cookie), file)) {
+        fprintf(stderr, "Error: Failed to read session cookie from AOC_SESSION_COOKIE.\n");
+        fclose(file);
+        exit(EXIT_FAILURE);
+    }
+
+    fclose(file);
+    // Remove trailing newline, if any
+    size_t len = strlen(session_cookie);
+    if (len > 0 && session_cookie[len - 1] == '\n') {
+        session_cookie[len - 1] = '\0';
+    }
+    return session_cookie;
+}
 
 // Test individual days using run_day from main.c
 void test_day(int day) {
     printf("Testing Day %d...\n", day);
-
-    // Redirect stderr to capture potential errors
-    fflush(stderr);
     run_day(day);
-
     printf("Day %d passed.\n", day);
 }
 
 // Test all days using run_all_days from main.c
 void test_all_days() {
     printf("Testing all days...\n");
-
-    // Redirect stderr to capture potential errors
-    fflush(stderr);
     run_all_days();
-
     printf("All days passed.\n");
 }
 
 // Test data-fetching utilities
-void test_fetch_day(int year, int day, const char *session_cookie) {
+void test_fetch_day(int year, int day) {
     printf("Testing data-fetching for Day %d, Year %d...\n", day, year);
 
     // Fetch data for the specific day
-    fetch_day_data(year, day, session_cookie);
+    fetch_day_data(year, day, get_session_cookie());
 
     // Validate that the input file exists
     char filename[256];
@@ -49,11 +67,8 @@ void test_fetch_day(int year, int day, const char *session_cookie) {
 int main() {
     printf("Running all tests for Advent of Code...\n");
 
-    // your_session_cookie_here
-    const char *session_cookie = "53616c7465645f5fe7a4a54e6a0f4e69c521a674aeba1d70ed5dfa5d9b02fe041c3216faee128f93c918210bcde1e0e25a2c674fae0612e2f01d68536037c2b4";
-
     // Test data-fetching for Day 1
-    test_fetch_day(2015, 1, session_cookie);
+    test_fetch_day(2015, 1);
 
     // Test individual days
     for (int day = 1; day <= 25; day++) {

@@ -78,9 +78,10 @@ main: gcc2 clang2
 	@echo "Creating unified executable for both compilers: $(EXECUTABLE_MAIN)"
 	@mkdir -p $(BUILD_DIR)/main
 	@echo "#!/bin/bash" > $(EXECUTABLE_MAIN)
-	@echo "$(BUILD_DIR)/gcc/gcc2 all" >> $(EXECUTABLE_MAIN)
-	@echo "$(BUILD_DIR)/clang/clang2 all" >> $(EXECUTABLE_MAIN)
-	@echo "$(BUILD_DIR)/main/main all" >> $(EXECUTABLE_MAIN)
+	@echo "echo \"Running all solutions for GCC2:\"" >> $(EXECUTABLE_MAIN)
+	@echo "$(BUILD_DIR)/gcc/gcc2 all || { echo \"GCC2 solutions failed.\"; exit 1; }" >> $(EXECUTABLE_MAIN)
+	@echo "echo \"Running all solutions for CLANG2:\"" >> $(EXECUTABLE_MAIN)
+	@echo "$(BUILD_DIR)/clang/clang2 all || { echo \"CLANG2 solutions failed.\"; exit 1; }" >> $(EXECUTABLE_MAIN)
 	@chmod +x $(EXECUTABLE_MAIN)
 
 # Build example executable
@@ -110,6 +111,17 @@ install: aoc gcc2 clang2 main example hello
 	@sudo cp $(EXECUTABLE_HELLO) /usr/local/bin/hello
 	@sudo chmod +x /usr/local/bin/aoc /usr/local/bin/gcc2 /usr/local/bin/clang2 /usr/local/bin/main /usr/local/bin/example /usr/local/bin/hello
 
+# Install tracker globally
+install_tracker:
+	@if [ -f tracker.sh ]; then \
+	    chmod +x tracker.sh; \
+	    sudo mv tracker.sh /usr/local/bin/tracker; \
+	    echo "Tracker installed."; \
+	else \
+	    echo "Warning: Tracker script not found. Skipping installation."; \
+	fi
+
+
 # Makefile checkpoint for compilers and aoc library
 verify:
 	@echo "Current PATH:"
@@ -117,6 +129,13 @@ verify:
 	@echo "If necessary, add /usr/local/bin to your PATH:"
 	@echo 'export PATH=/usr/local/bin:$$PATH'
 	@echo "Installation of workflow environment complete!"
+
+# Testing and benchmarking
+tests/test: tests/test.c main.c day1.c
+	clang -Wall -o tests/test tests/test.c main.c day1.c
+
+tests/benchmark: tests/benchmark.c main.c day1.c
+	clang -Wall -o tests/benchmark tests/benchmark.c main.c day1.c
 
 # Clean build artifacts and remove globally installed executables
 clean:
