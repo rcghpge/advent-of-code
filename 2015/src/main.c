@@ -8,6 +8,7 @@
 #include "day1.h"
 #include "day2.h"
 #include "day3.h"
+#include "day4.h"
 
 // Include other day headers as needed
 // #include "day2.h"
@@ -28,6 +29,9 @@ void run_day(int day) {
 	case 3:
 	    run_day3();
 	    break;
+	case 4:
+	    run_day4();
+	    break;
         // Add other cases as needed
         // case 2:
         //     run_day2();
@@ -43,7 +47,7 @@ void run_day(int day) {
 void run_all_days() {
     printf("Running solutions for all implemented days...\n");
 
-    int implemented_days[] = {1, 2, 3}; // Add more days as they are implemented
+    int implemented_days[] = {1, 2, 3, 4}; // Add more days as they are implemented
     int num_days = sizeof(implemented_days) / sizeof(implemented_days[0]);
 
     for (int i = 0; i < num_days; i++) {

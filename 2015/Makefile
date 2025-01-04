@@ -6,7 +6,7 @@ CC_GCC = gcc
 LINKER_CLANG = lld
 LINKER_GCC = gold
 CFLAGS = -Wall -I./include
-LDFLAGS = -lcurl
+LDFLAGS = -lcurl -lcrypto
 
 # Directories
 SRC_DIR = src
