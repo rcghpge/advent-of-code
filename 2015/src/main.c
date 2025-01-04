@@ -6,6 +6,8 @@
 #include <time.h>
 #include "main.h"
 #include "day1.h"
+#include "day2.h"
+#include "day3.h"
 
 // Include other day headers as needed
 // #include "day2.h"
@@ -20,6 +22,12 @@ void run_day(int day) {
         case 1:
             run_day1(); // Function for Day 1 solution
             break;
+	case 2:
+            run_day2();
+            break;
+	case 3:
+	    run_day3();
+	    break;
         // Add other cases as needed
         // case 2:
         //     run_day2();
@@ -35,17 +43,12 @@ void run_day(int day) {
 void run_all_days() {
     printf("Running solutions for all implemented days...\n");
 
-    static int call_count = 0; // Track how many times this function is called
-    call_count++;
-    printf("Debug: run_all_days() called %d times.\n", call_count);
-
-    // Array of implemented days
-    int implemented_days[] = {1}; // Add more days as they are implemented
+    int implemented_days[] = {1, 2, 3}; // Add more days as they are implemented
     int num_days = sizeof(implemented_days) / sizeof(implemented_days[0]);
 
     for (int i = 0; i < num_days; i++) {
         int day = implemented_days[i];
-        printf("Calling run_day(%d)\n", day);
+        printf("Running solution for Day %d (%d/%d)...\n", day, i + 1, num_days);
         run_day(day);
     }
 
@@ -53,13 +56,6 @@ void run_all_days() {
 }
 
 int main(int argc, char *argv[]) {
-    // Print program start and arguments for debugging
-    printf("Debug: Starting main() with PID: %d, Parent PID: %d, Arguments: ", getpid(), getppid());
-    for (int i = 0; i < argc; i++) {
-        printf("%s ", argv[i]);
-    }
-    printf("\n");
-
     // Validate input arguments
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <day> | all\n", argv[0]);
@@ -69,7 +65,6 @@ int main(int argc, char *argv[]) {
     // Handle "all" argument
     if (strcmp(argv[1], "all") == 0) {
         run_all_days();
-        printf("Debug: Exiting main after run_all_days().\n");
         return EXIT_SUCCESS;
     }
 
@@ -84,7 +79,6 @@ int main(int argc, char *argv[]) {
 
     // Run solution for the specified day
     run_day((int)day);
-    printf("Debug: Exiting main after run_day(%d).\n", (int)day);
 
     return EXIT_SUCCESS;
 }

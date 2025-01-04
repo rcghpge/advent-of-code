@@ -45,7 +45,7 @@ aoc: $(EXECUTABLE_AOC)
 $(EXECUTABLE_AOC): $(LIB_AOC_SOURCES) $(HEADERS)
 	@mkdir -p $(BUILD_DIR)/aoc
 	@echo "Building aoc executable: $@"
-	$(CC_GCC) $(CFLAGS) -fuse-ld=$(LINKER_GCC) -DSTANDALONE_AOC $(LIB_AOC_SOURCES) -o $@ $(LDFLAGS)
+	$(CC_GCC) $(CFLAGS) -fuse-ld=$(LINKER_CLANG) -DSTANDALONE_AOC $(LIB_AOC_SOURCES) -o $@ $(LDFLAGS)
 
 # Build custom gcc2 compiler
 gcc2: $(EXECUTABLE_GCC)
@@ -57,7 +57,7 @@ $(EXECUTABLE_GCC): $(GCC_OBJECTS)
 
 $(OBJ_DIR_GCC)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	@mkdir -p $(OBJ_DIR_GCC)
-	@echo "Compiling with GCC: $<"
+	@echo "Compiling with GCC2: $<"
 	$(CC_GCC) $(CFLAGS) -c $< -o $@
 
 # Build custom clang2 compiler
@@ -70,7 +70,7 @@ $(EXECUTABLE_CLANG): $(CLANG_OBJECTS)
 
 $(OBJ_DIR_CLANG)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	@mkdir -p $(OBJ_DIR_CLANG)
-	@echo "Compiling with Clang: $<"
+	@echo "Compiling with Clang2: $<"
 	$(CC_CLANG) $(CFLAGS) -c $< -o $@
 
 # Build unified main compiler (both compilers)
@@ -140,7 +140,6 @@ tests/benchmark: tests/benchmark.c main.c day1.c
 # Clean build artifacts and remove globally installed executables
 clean:
 	@rm -rf $(BUILD_DIR)
-	@echo "Cleaning workflow environment..."
 	@sudo rm -f /usr/local/bin/aoc /usr/local/bin/gcc2 /usr/local/bin/clang2 /usr/local/bin/main /usr/local/bin/example /usr/local/bin/hello
-	@echo "Workflow environment cleaning complete."
+	@echo "Workflow environment clean."
 

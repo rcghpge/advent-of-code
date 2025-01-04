@@ -4,6 +4,14 @@
 TRACKER_INSTALL_PATH="/usr/local/bin/tracker"
 TRACKER_SCRIPT=$(realpath "$0") # Full path of this script
 
+# Debug mode (set to "true" to enable, "false" to disable)
+DEBUG=false # set to true or fals to debug tracker 
+
+# Enable debugging if DEBUG is true
+if [ "$DEBUG" == "true" ]; then
+    set -x  # Enables debug mode (prints each command before executing)
+fi
+
 # Function to install tracker globally
 install_tracker() {
     echo "Installing tracker globally..."
@@ -25,12 +33,10 @@ install_tracker() {
 # Function to track changes and rebuild selectively
 track_and_rebuild() {
     echo "Tracking changes in 'day*.c', 'main.c', and related files..."
-
-    # Monitor relevant files and trigger rebuilds
     find src/ include/ Makefile -type f \( -name "day*.c" -o -name "main.c" -o -name "*.h" \) | entr -c bash -c "
-        echo 'Changes detected. Rebuilding impacted targets...';
-        make gcc2 clang2 aoc main all || { echo 'Error: Build failed. Check your code.'; exit 1; }
-        echo 'Rebuild complete. Use commands like gcc2, clang2, or main to test your solutions.';
+        echo \"$(date): Changes detected. Rebuilding impacted targets...\";
+        make gcc2 clang2 aoc main all || { echo \"$(date): Error: Build failed. Check your code.\"; exit 1; }
+        echo \"$(date): Rebuild complete. Use commands like gcc2, clang2, or main to test your solutions.\";
     "
 }
 
