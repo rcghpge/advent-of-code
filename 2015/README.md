@@ -1,6 +1,6 @@
 # Advent of Code 2015 - C Language
 
-**WIP** - Currently debugging. For most part fully stable. School is beginning soon. May not complete before semester starts.
+**WIP** - School is beginning soon. May not complete before semester starts.
 
 Welcome to the **Advent of Code 2015** directory in the C programming language! This repository provides solutions to the Advent of Code 2015 challenges, written in C with support for both **GCC** and **Clang** compilers. The project is designed for portability, robustness, and flexibility.
 
