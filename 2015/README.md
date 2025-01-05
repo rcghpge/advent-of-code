@@ -1,6 +1,6 @@
 # Advent of Code 2015 - C Programming Language
 
-Welcome to the **Advent of Code 2015** project written in **C**! This repository provides robust and optimized solutions for Advent of Code 2015, with support for both **GCC** and **Clang** compilers. The project emphasizes performance, modularity, and clarity.
+Welcome to my **Advent of Code 2015** solutions written in **C**! This directory provides robust and optimized solutions for Advent of Code 2015, with support for both **GCC** and **Clang** compilers. The project emphasizes performance, modularity, and clarity.
 
 ---
 
