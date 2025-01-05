@@ -35,16 +35,6 @@ lib/*.dylib
 *.DS_Store
 Thumbs.db
 
-# Compiled binaries for examples
-examples/example
-examples/hello
-example
-hello
-aoc
-gcc2
-clang2
-main
-
 # Python virtual environments (if applicable)
 venv/
 env/
@@ -59,6 +49,7 @@ docs/
 !tests/
 !data/
 !examples/
+!lib/aoc/
 
 # Ensure data and examples directories are tracked but ignore their generated content
 data/*.tmp
