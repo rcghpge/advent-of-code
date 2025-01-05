@@ -26,7 +26,6 @@ lib/libuv/build
 lib/*.a
 lib/*.so
 lib/*.dylib
-lib/*
 
 # Temporary files and editor backups
 *.tmp
@@ -58,7 +57,7 @@ docs/
 # Exclude specific directories but keep their structure
 !include/
 !tests/
-!data/.gitkeep
+!data/
 !examples/
 
 # Ensure data and examples directories are tracked but ignore their generated content
