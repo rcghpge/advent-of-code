@@ -1,4 +1,4 @@
-// Day 2
+// Day 2 - I Was Told There Would Be No Math
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -93,12 +93,12 @@ void run_day2() {
     double end_time = get_time_in_seconds();
 
     // Output the results
-    printf("Part 1: Total wrapping paper required %d\n", part1_result);
-    printf("Part 2: Total ribbon length required %d\n", part2_result);
+    printf("Part 1 - Total wrapping paper required: %d\n", part1_result);
+    printf("Part 2 - Total ribbon length required %d\n", part2_result);
 
     // Output execution time
     double elapsed_time = end_time - start_time;
-    printf("Execution Time: %.6f seconds\n", elapsed_time);
+    printf("Execution time: %.6f seconds\n", elapsed_time);
 
     // Free allocated memory
     free(input);

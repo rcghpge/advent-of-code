@@ -1,13 +1,15 @@
-// Day 4
+// Day 4 - The Ideal Stocking Stuffer
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <time.h>
 #include <openssl/evp.h>
 #include "day4.h"
 #include "main.h"
 
 #define INPUT_FILE "data/4.txt"
+#define MAX_BUFFER_SIZE 1024 // Increase buffer size if necessary
 
 // Check if hash starts with 5 zeros
 static inline int starts_with_5_zeros(const unsigned char hash[16]) {
@@ -19,17 +21,29 @@ static inline int starts_with_6_zeros(const unsigned char hash[16]) {
     return hash[0] == 0 && hash[1] == 0 && hash[2] == 0;
 }
 
-// Append a number to a string
-static int append_number(char *dest, int num) {
-    return sprintf(dest, "%d", num);
+// Efficiently append a number to a string without using sprintf
+static void append_number(char *dest, int num) {
+    char temp[32]; // Buffer to hold the number as a string (up to 32 digits for large numbers)
+    int len = 0;
+
+    while (num > 0) {
+        temp[len++] = (num % 10) + '0';  // Convert digit to character
+        num /= 10;
+    }
+
+    // Reverse string to ensure correct order
+    for (int i = 0; i < len; i++) {
+        dest[i] = temp[len - 1 - i];
+    }
+    dest[len] = '\0';  // Null-terminate the string
 }
 
-// Solve the problem for a given condition
+// Solve problem for a given condition
 static int solve(const char *input, size_t length, int start,
                  int (*starts_with)(const unsigned char hash[16])) {
     unsigned char hash[EVP_MAX_MD_SIZE];
     unsigned int hash_len;
-    char buffer[256];
+    char buffer[MAX_BUFFER_SIZE];  // Increase buffer size if necessary
     memcpy(buffer, input, length);
     char *numStart = buffer + length;
 
@@ -40,10 +54,10 @@ static int solve(const char *input, size_t length, int start,
     }
 
     for (int i = start;; ++i) {
-        int numLength = append_number(numStart, i);
+        append_number(numStart, i);  // Efficiently append number to string
 
         if (EVP_DigestInit_ex(mdctx, EVP_md5(), NULL) != 1 ||
-            EVP_DigestUpdate(mdctx, buffer, length + numLength) != 1 ||
+            EVP_DigestUpdate(mdctx, buffer, length + strlen(numStart)) != 1 ||
             EVP_DigestFinal_ex(mdctx, hash, &hash_len) != 1) {
             perror("Error computing MD5 hash");
             EVP_MD_CTX_free(mdctx);
@@ -95,9 +109,10 @@ void run_day4() {
     double elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
                           (end_time.tv_nsec - start_time.tv_nsec) / 1e9;
 
-    printf("Part 1: %d\n", part1);
-    printf("Part 2: %d\n", part2);
-    printf("Execution Time: %.6f seconds\n", elapsed_time);
+    printf("Part 1 - First hash: %d\n", part1);
+    printf("Part 2 - Second hash: %d\n", part2);
+    printf("Execution time: %.6f seconds\n", elapsed_time);
 
     free(input);
 }
+

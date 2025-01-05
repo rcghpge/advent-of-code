@@ -1,5 +1,21 @@
 # Build instructions
 
+# Default verbose output flag
+VERBOSE ?= 0
+Q = $(if $(filter 1, $(VERBOSE)),,@)
+
+# Clean build artifacts and remove globally installed executables
+clean:
+	@echo "Cleaning build artifacts..."
+	@rm -rf $(BUILD_DIR)
+	@sudo rm -f /usr/local/bin/aoc \
+	              /usr/local/bin/gcc2 \
+	              /usr/local/bin/clang2 \
+	              /usr/local/bin/main \
+	              /usr/local/bin/example \
+	              /usr/local/bin/hello
+	@echo "Workflow environment clean."
+
 # Compiler and flags
 CC_CLANG = clang
 CC_GCC = gcc
@@ -121,7 +137,6 @@ install_tracker:
 	    echo "Warning: Tracker script not found. Skipping installation."; \
 	fi
 
-
 # Makefile checkpoint for compilers and aoc library
 verify:
 	@echo "Current PATH:"
@@ -136,10 +151,4 @@ tests/test: tests/test.c main.c day1.c
 
 tests/benchmark: tests/benchmark.c main.c day1.c
 	clang -Wall -o tests/benchmark tests/benchmark.c main.c day1.c
-
-# Clean build artifacts and remove globally installed executables
-clean:
-	@rm -rf $(BUILD_DIR)
-	@sudo rm -f /usr/local/bin/aoc /usr/local/bin/gcc2 /usr/local/bin/clang2 /usr/local/bin/main /usr/local/bin/example /usr/local/bin/hello
-	@echo "Workflow environment clean."
 

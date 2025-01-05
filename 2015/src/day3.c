@@ -1,4 +1,4 @@
-// Day 3
+// Day 3 - Perfectly Spherical Houses in a Vacuum
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,7 +10,7 @@
 // Solve Part 1: Single Santa
 static size_t solve_part1(const char *input, size_t length) {
     int visited[1000][1000] = {{0}}; // Assume a grid size
-    int x = 500, y = 500; // Start at the middle of the grid
+    int x = 500, y = 500; // Start at middle of grid
     visited[x][y] = 1;
 
     size_t unique_houses = 1;
@@ -69,7 +69,7 @@ static double get_time_in_seconds() {
 }
 
 void run_day3() {
-    // Open the input file
+    // Open input file
     FILE *file = fopen(INPUT_FILE, "r");
     if (!file) {
         perror("Error opening input file");
@@ -93,7 +93,7 @@ void run_day3() {
     input[file_size] = '\0'; // Null-terminate the input
     fclose(file);
 
-    // Time the solution
+    // Time solution
     double start_time = get_time_in_seconds();
     size_t part1_result = solve_part1(input, file_size);
     size_t part2_result = solve_part2(input, file_size);
@@ -105,7 +105,7 @@ void run_day3() {
 
     // Output execution time
     double elapsed_time = end_time - start_time;
-    printf("Execution Time: %.6f seconds\n", elapsed_time);
+    printf("Execution time: %.6f seconds\n", elapsed_time);
 
     // Free allocated memory
     free(input);

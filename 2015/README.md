@@ -1,8 +1,6 @@
-# Advent of Code 2015 - C Language
+# Advent of Code 2015 - C Programming Language
 
-**WIP** - School is beginning soon. May not complete before semester starts.
-
-Welcome to the **Advent of Code 2015** directory in the C programming language! This repository provides solutions to the Advent of Code 2015 challenges, written in C with support for both **GCC** and **Clang** compilers. The project is designed for portability, robustness, and flexibility.
+Welcome to the **Advent of Code 2015** project written in **C**! This repository provides robust and optimized solutions for Advent of Code 2015, with support for both **GCC** and **Clang** compilers. The project emphasizes performance, modularity, and clarity.
 
 ---
 
@@ -10,86 +8,69 @@ Welcome to the **Advent of Code 2015** directory in the C programming language! 
 
 ```plaintext
 2015/
-├── Makefile            # Automates building, running, cleaning, and installing the project
-├── README.md           # Documentation of the project
-├── setup.sh            # Script to set up the environment and dependencies
-├── data/               # Input files for each challenge
-│   ├── 1.txt           # Input for Day 1
-│   └── ...             # Inputs for Days 2–25
-├── examples/           # Example scripts and binaries (e.g., libuv timer demo)
-│   ├── example         # Compiled binary for example.c
-│   ├── example.c       # Libuv timer example
-│   ├── hello           # Compiled binary for hello.c
-│   └── hello.c         # Simple "Hello, World!" example
-├── include/            # Header files
-│   ├── day1.h          # Header for Day 1 solution
-│   └── ...             # Headers for Days 2–25
-├── lib/                # External libraries (e.g., libuv)
-│   └── aoc/            # Advent of Code utilities
-├── src/                # Source files for each day's solution
-│   ├── main.c          # Main entry point
-│   ├── day1.c          # Solution for Day 1
-│   └── ...             # Solutions for Days 2–25
-└── tests/              # Test files (optional)
-    ├── test.c          # Test utilities
-    └── ...             # Additional test files
+├── Makefile        # Automates building, running, cleaning, and installing the project
+├── README.md       # Project documentation
+├── setup.sh        # Script to set up the environment and dependencies
+├── tracker.sh      # Script to monitor and log changes in the workflow
+├── data/           # Input files for each challenge (1.txt, 2.txt, ..., 25.txt)
+├── examples/       # Example C programs (e.g., hello.c, example.c)
+├── include/        # Header files (day1.h, day2.h, ..., day25.h)
+├── lib/            # External libraries (e.g., libuv, aoc utilities)
+├── src/            # Source files for each day's solution (day1.c, ..., day25.c)
+└── tests/          # Test files for verifying correctness and performance
 ```
 
 ---
 
 ## Setup Instructions
-
-### Step 1: Run the Setup Script
-
-Run the setup script to initialize your environment:
+### Step 1: Initialize the Workflow Environment
+Run the `setup.sh` script to configure your environment:
 
 ```bash
 ./setup.sh
 ```
 
-This script:
+The `setup.sh` script:
 - Ensures **GCC**, **Clang**, **Make**, and other dependencies are installed.
-- Configures your environment and sets up the **Advent of Code session cookie**.
+- Configures the **Advent of Code session cookie** for automated input fetching.
 - Creates necessary directories (`data/`, `build/`, `examples/`).
-- Builds and installs tech stack (e.g., `aoc`, `gcc2`, `clang2`, etc.).
+- Builds and installs tools (e.g., `gcc2`, `clang2`, `main`, etc.).
 
-### Step 2: Fetch Input Data
+Use `./setup.sh -v` for verbose output during setup.
 
-Pull input data for each day into the `data/` directory using the `aoc` command. For example:
+### Step 2: Monitor Workflow Changes (Optional)
+Use `tracker.sh` to monitor workflow changes:
 
 ```bash
-aoc 1 2015       # Fetch input for Day 1 of 2015
-aoc all 2015     # Fetch inputs for all days of 2015
+tracker
+trackr --help
 ```
 
-This will store input files like `data/1.txt`, `data/2.txt`, etc.
+The `tracker.sh` script logs changes in files, directories, and build artifacts to help debug issues and track progress.
 
 ---
 
-## Building and Running
-
+## Building and Running Solutions
 ### Build the Project
-
 To build all components (e.g., `aoc`, `gcc2`, `clang2`, examples):
 
 ```bash
 make all
 ```
-Install Makefile workflow environment config
+
+Install the workflow environment:
 
 ```bash
 make install
 ```
-
-### Run Solutions
-
-- Run a specific day's solution using GCC:
+### Run Specific Solutions
+- Run Day 1 solution with GCC:
 
 ```bash
 gcc2 1
 ```
 
-- Run a specific day's solution using Clang:
+- Run Day 1 solution with Clang:
 
 ```bash
 clang2 1
@@ -100,79 +81,85 @@ clang2 1
 ```bash
 main all
 ```
+- Run Examples
 
-### Examples in C
-
-Run example in c provided in the `examples/` directory:
-
+### Run example programs in the `examples/` directory:
 ```bash
 example       # Run the libuv timer example
 hello         # Run the Hello World example
 ```
 
 ### Clean Workflow Environment
-
-To remove all build artifacts and reset the environment:
+Remove all build artifacts and reset the environment:
 
 ```bash
+Copy code
 make clean
 ```
 
 ---
 
-## Input Validation
+## Performance Monitoring
+### Measure Execution Time
+The `main`, `gcc2`, and `clang2` commands provide total execution times:
 
-The `Makefile` validates that input files are present in the `data/` directory. If input files are missing or incomplete, appropriate warnings or errors are displayed.
+- Example for running all solutions:
 
-- Example error message if no input files are found:
-
-```plaintext
-Error: No input files found in data/.
+```bash
+main all
 ```
 
-- Example warning if some files are missing:
+Output:
 
 ```plaintext
-Warning: Input file data/2.txt is missing.
-Input validation complete: Found 24 out of 25 files.
+Running all solutions for GCC2...
+...
+Total Execution Time for GCC2: 3.542 seconds
+
+Running all solutions for CLANG2...
+...
+Total Execution Time for CLANG2: 3.482 seconds
 ```
 
 ---
 
 ## Dependencies
-
-- [**GCC:**](https://gcc.gnu.org/onlinedocs/) GNU Compiler Collection
-- [**Clang:**](https://clang.llvm.org/docs/index.html) LLVM Compiler
-- [**Make:**](https://www.gnu.org/software/make/manual/make.html) Build automation tool
-- [**libuv:**](https://libuv.org/) Cross-platform asynchronous I/O library
-- [**cURL:**](https://curl.se/docs/manpage.html) Command-line tool for fetching input data
+- [GCC](https://gcc.gnu.org/)GNU Compiler Collection
+- [Clang](https://clang.llvm.org/)LLVM Compiler
+- [Make](https://www.gnu.org/software/make/)Build automation tool
+- [libuv](https://libuv.org/)Cross-platform asynchronous I/O library
+- [cURL](https://libuv.org/)Command-line tool for fetching input data
 
 ---
 
 ## Contributing
-
-Contributions are welcome! Here’s how you can help:
-- Provide feedback on improving the directory structure or code readability.
-- Submit pull requests to optimize solutions or address issues.
-- Add test cases to improve solution coverage and robustness.
+Contributions are welcome! Here's how you can help:
+- Optimize solutions for performance or clarity.
+- Add test cases to improve coverage and robustness.
+- Submit pull requests for improvements or new features.
+- Tracker is a new toolchain I built. It can become general purpose.
 
 ---
 
 ## Troubleshooting
+### Common Issues
+1. Executable Not Found:
 
-### Common Issues:
-1. **Executable Not Found:**
-   - Ensure the `setup.sh` script completed without errors.
-   - Verify the stack is in your `PATH` using `which <command>`.
+- Ensure `setup.sh` completed without errors.
+- Verify the stack is in your `PATH` using `which <command>`.
 
-2. **Input Data Missing:**
-   - Use the `aoc` command to fetch input data for specific days.
+2. Input Data Missing:
 
-3. **Compiler Conflicts:**
-   - Ensure GCC (`gcc2`) and Clang (`clang2`) compilers are correctly configured.
+- Use the `aoc` command to fetch input data for specific days.
 
-For additional help, submit an issue or ask for support.
+3. Compiler Conflicts:
+
+- Ensure GCC(`gcc2`) and Clang(`clang2`) compilers are installed correctly.
+
+4. Permission Errors:
+
+- Ensure proper permissions for the setup.sh script and executables (chmod +x setup.sh).
 
 ---
 
-Happy Coding! =)
+Happy Coding!
