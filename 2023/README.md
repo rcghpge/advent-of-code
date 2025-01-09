@@ -1,7 +1,5 @@
 # Advent of Code 2023 - Rust
 
-**Work in Progress**
-
 This repository contains solutions to the **Advent of Code 2023** challenges, implemented in **Rust**. Each day's solution is modularized for clarity, scalability, and ease of navigation.
 
 ---
