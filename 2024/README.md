@@ -1,7 +1,7 @@
 # Advent of Code 2024 - Mojo Programming Language 🔥
 Welcome to my Advent of Code 2024 submissions, written in the Mojo programming language! This is my first journey into Mojo, a cutting-edge language developed by the Modular team, and while the language is still evolving, so are my solutions. Not all puzzles are fully solved, but they represent my learning process and progress in mastering Mojo.
 
-Big thanks to the Modular community on Discord, Python community, Linux community, and the broader programming community for the help along the way. The feedback and help was invaluable as I have been learning Mojo.
+Big thanks to the Modular community, Python community, Linux community, and the broader programming community for the help along the way. The feedback and help was invaluable as I have been learning Mojo.
 
 ## A Hybrid Approach 🚀
 To ensure accuracy, I often used Python to cross-reference my Mojo solutions and validate my logic. Python’s mature ecosystem and extensive community resources proved to be an excellent companion for understanding and solving these challenges.
