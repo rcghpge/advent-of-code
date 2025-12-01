@@ -1,5 +1,12 @@
 # advent-of-code
 
+<table align="center" width="100%">
+  <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="assets/aoc.jpg" alt="Advent of Code"
+           style="width: 320px; height: auto;" />
+  </tr>
+</table>
 List of programming languages I want to complete AOC challenges on.
 
 ---
