@@ -1,5 +1,6 @@
 # advent-of-code
 
+- 2025 - Fortran
 - 2024 - Mojo 
 - 2023 - Rust 
 - 2015 - C
