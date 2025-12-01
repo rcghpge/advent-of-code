@@ -4,7 +4,7 @@
   <tr>
     <td align="center" style="padding: 10px;">
       <img src="assets/aoc.jpg" alt="Advent of Code"
-           style="width: 320px; height: auto;" />
+           style="width: 1080px; height: auto;" />
   </tr>
 </table>
 List of programming languages I want to complete AOC challenges on.
