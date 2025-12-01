@@ -1,0 +1,4 @@
+PROGRAM Test
+  IMPLICIT NONE
+  PRINT *, "Test"
+END PROGRAM Test

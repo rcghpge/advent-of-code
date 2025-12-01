@@ -11,3 +11,7 @@
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# local builds
+*.f90~
+*.cpp~
