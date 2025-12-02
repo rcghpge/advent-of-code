@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
 int main() {
     string line; getline(cin, line);
     line.erase(remove(line.begin(), line.end(), ' '), line.end());

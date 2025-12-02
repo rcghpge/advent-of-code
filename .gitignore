@@ -8,6 +8,7 @@
 # subrepo directories
 2015/lib/*
 2025/lib/libuv/*
+
 # pixi environments
 .pixi/*
 !.pixi/config.toml
