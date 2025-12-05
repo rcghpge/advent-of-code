@@ -2,7 +2,7 @@
 authors = ["Robert Cocker <rcocker87@gmail.com>"]
 channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
 name = "advent-of-code"
-platforms = []
+platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
@@ -10,14 +10,14 @@ version = "0.1.0"
 [dependencies]
 bandit = ">=1.9.2,<2"
 pip-audit = ">=2.10.0,<3"
-clang = ">=21.1.6,<22"
+clang = ">=21.1.7,<22"
 gcc = ">=15.2.0,<15.3"
 gfortran = ">=15.2.0,<15.3"
 cmake = ">=4.2.0,<5"
 libcxx = ">=21.1.7,<22"
-clang-tools = ">=21.1.6,<22"
-clang-format = ">=21.1.6,<22"
-mojo = ">=0.26.1.0.dev2025120205,<0.27"
-mojo-compiler = ">=0.26.1.0.dev2025120205,<0.27"
+clang-tools = ">=21.1.7,<22"
+clang-format = ">=21.1.7,<22"
+mojo = ">=0.26.1.0.dev2025120505,<0.27"
+mojo-compiler = ">=0.26.1.0.dev2025120505,<0.27"
 cppcheck = ">=2.18.3,<3"
-flang = ">=21.1.6,<22"
+flang = ">=21.1.7,<22"
