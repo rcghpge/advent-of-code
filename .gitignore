@@ -14,5 +14,7 @@
 !.pixi/config.toml
 
 # local builds
+*.txt~
 *.f90~
 *.cpp~
+*.R~
